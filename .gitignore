@@ -1,0 +1,15 @@
+*.vscode
+**/*cache*
+**/__pycache__
+**/.mypy_cache
+**/CMakeFiles
+**/CMakeCache.txt
+**/cmake_install.cmake
+**/Makefile
+**/*.so
+**/compile_commands.json
+**/npim-cli
+**/*.ppm
+**/*.ipynb
+**/*Doxy*
+solver/build
