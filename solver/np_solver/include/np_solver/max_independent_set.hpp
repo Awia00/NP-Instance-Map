@@ -38,7 +38,7 @@ class MaxIndependentSet
         size_t best = 0;
 
         auto number_of_solutions = 1 << V;
-        std::cout << g.edges << std::endl;
+        std::cout << "G: " << g.edges << std::endl;
         // std::cout << g.string_representation() << std::endl;
 
         // std::cout << "Solutions:" << std::endl;
@@ -52,7 +52,7 @@ class MaxIndependentSet
                 // std::cout << "  " << solution << " size: " << solution.count() << std::endl;
             }
         }
-        std::cout << "#Solutions: " << counter << " Best: " << best << std::endl;
+        std::cout << "#Solutions: " << counter << ", Best: " << best << std::endl;
         std::cout << std::endl;
         return best;
     }
