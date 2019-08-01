@@ -30,6 +30,20 @@ struct Graph
         return edges[RM(v1, v2, V)];
     }
 
+    bool is_undirected() const
+    {
+        auto undirected = true;
+        for (auto i = 0; i < V && undirected; i++)
+        {
+            undirected &= !has_edge(i, i);
+            for (auto j = 0; j < V; j++)
+            {
+                undirected &= has_edge(i, j) == has_edge(j, i);
+            }
+        }
+        return undirected;
+    }
+
     std::string string_representation() const
     {
         std::stringstream ss;

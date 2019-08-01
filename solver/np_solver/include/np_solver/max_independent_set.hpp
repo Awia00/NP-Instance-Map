@@ -23,17 +23,7 @@ class MaxIndependentSet
         {
             auto g = Graph<V>(instance);
             // TODO: find a smarter way to generate instances so we do not have to check for undirectedness.
-
-            auto undirected = true;
-            for (auto i = 0; i < V && undirected; i++)
-            {
-                undirected &= !g.has_edge(i, i);
-                for (auto j = 0; j < V; j++)
-                {
-                    undirected &= g.has_edge(i, j) == g.has_edge(j, i);
-                }
-            }
-            if (undirected)
+            if (g.is_undirected())
             {
                 undirected_graphs++;
                 solve_single(g);
@@ -48,8 +38,8 @@ class MaxIndependentSet
         size_t best = 0;
 
         auto number_of_solutions = 1 << V;
-        // std::cout << g.edges << std::endl;
-        std::cout << g.string_representation() << std::endl;
+        std::cout << g.edges << std::endl;
+        // std::cout << g.string_representation() << std::endl;
 
         // std::cout << "Solutions:" << std::endl;
         for (auto i = 0; i < number_of_solutions; i++)
@@ -59,10 +49,10 @@ class MaxIndependentSet
             {
                 counter++;
                 best = std::max(best, solution.count());
-                std::cout << "  " << solution << " size: " << solution.count() << std::endl;
+                // std::cout << "  " << solution << " size: " << solution.count() << std::endl;
             }
         }
-        // std::cout << "#Solutions: " << counter << " Best: " << best << std::endl;
+        std::cout << "#Solutions: " << counter << " Best: " << best << std::endl;
         std::cout << std::endl;
         return best;
     }
