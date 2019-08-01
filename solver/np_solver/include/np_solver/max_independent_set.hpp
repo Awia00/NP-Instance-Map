@@ -22,10 +22,12 @@ class MaxIndependentSet
         for (uint64_t instance = 0; instance < number_of_graphs; instance++)
         {
             auto g = Graph<V>(instance);
-            auto undirected = true;
             // TODO: find a smarter way to generate instances so we do not have to check for undirectedness.
-            for (auto i = 0; i < V; i++)
+
+            auto undirected = true;
+            for (auto i = 0; i < V && undirected; i++)
             {
+                undirected &= !g.has_edge(i, i);
                 for (auto j = 0; j < V; j++)
                 {
                     undirected &= g.has_edge(i, j) == g.has_edge(j, i);
@@ -71,9 +73,9 @@ class MaxIndependentSet
         {
             if (solution[i])
             {
-                for (auto j = i + 1; j < V; j++)
+                for (auto j = 0; j < V; j++)
                 {
-                    if (g.has_edge(i, j) || g.has_edge(j, i))
+                    if (i != j && solution[j] && (g.has_edge(i, j) || g.has_edge(j, i)))
                     {
                         return false;
                     }

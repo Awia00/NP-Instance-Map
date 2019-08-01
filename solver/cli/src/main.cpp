@@ -10,7 +10,7 @@ void run()
     // auto g = Graph<5>(33554431);
     // std::cout << g.string_representation() << std::endl;
 
-    auto solver = MaxIndependentSet<3>();
+    auto solver = MaxIndependentSet<4>();
     solver.solve();
 }
 
