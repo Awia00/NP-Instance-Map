@@ -1,6 +1,5 @@
 #pragma once
 #include <bitset>
-#include <sstream>
 #include <stdint.h>
 
 #define RM(row, col, width) row* width + col
@@ -43,22 +42,21 @@ struct Graph
         }
         return undirected;
     }
-
-    std::string string_representation() const
-    {
-        std::stringstream ss;
-        ss << "G(V=" << V << ", E={" << std::endl;
-        for (auto i = 0; i < V; i++)
-        {
-            ss << "   ";
-            for (auto j = 0; j < V; j++)
-            {
-                ss << edges[RM(i, j, V)] << ", ";
-            }
-            ss << std::endl;
-        }
-        ss << "})";
-        return ss.str();
-    }
 };
+
+template <int V>
+std::ostream& operator<<(std::ostream& os, const Graph<V>& obj) {
+    os << "G(V=" << V << ", E={" << std::endl;
+    for (auto i = 0; i < V; i++)
+    {
+        os << "   ";
+        for (auto j = 0; j < V; j++)
+        {
+            os << obj.edges[RM(i, j, V)] << ", ";
+        }
+        os << std::endl;
+    }
+    return os << "})";
+}
+
 } // namespace npim
