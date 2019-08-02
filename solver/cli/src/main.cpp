@@ -8,7 +8,7 @@ namespace npim
 void run()
 {
     // auto g = Graph<5>(33554431);
-    // std::cout << g.string_representation() << std::endl;
+    // std::cout << g << std::endl;
 
     auto solver = MaxIndependentSet<5>();
     solver.solve();
