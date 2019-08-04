@@ -10,10 +10,8 @@ template <class SpecificGraph>
 struct Graph
 {
     public:
-    constexpr static int vertices()
-    {
-        return SpecificGraph::vertices();
-    }
+    constexpr static int vertices = SpecificGraph::vertices;
+    constexpr static uint64_t max_edges = SpecificGraph::max_edges;
 
     constexpr static uint64_t number_of_graphs()
     {

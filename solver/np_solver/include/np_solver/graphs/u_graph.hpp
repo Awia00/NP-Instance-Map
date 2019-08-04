@@ -9,25 +9,22 @@ namespace graphs
 template <int V>
 struct UGraph : Graph<UGraph<V>>
 {
+    constexpr static int vertices = V;
+    constexpr static int max_edges = ((V * (V - 1)) / 2);
+
     private:
-    const std::bitset<(V * (V - 1)) / 2> edges;
+    const std::bitset<max_edges> edges;
 
     public:
-    constexpr static int vertices()
-    {
-        return V;
-    }
-
     constexpr static uint64_t number_of_graphs()
     {
-        return 1ULL << ((V * (V - 1)) / 2);
+        return 1ULL << max_edges;
     }
 
     /**
      * edge_combination_bit is the number describing the bits that represent the activated edges.
      */
-    UGraph(uint64_t edge_combination_bit)
-      : edges(std::bitset<(V * (V - 1)) / 2>(edge_combination_bit))
+    UGraph(uint64_t edge_combination_bit) : edges(std::bitset<max_edges>(edge_combination_bit))
     {
     }
 

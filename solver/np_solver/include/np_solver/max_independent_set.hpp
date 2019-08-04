@@ -26,12 +26,11 @@ class MaxIndependentSet
     template <class GT>
     void solve()
     {
-        constexpr auto V = GT::vertices();
         const uint64_t number_of_graphs = GT::number_of_graphs();
         std::cout << "Processing #" << number_of_graphs << " graphs" << std::endl;
 
         auto undirected_graphs = 0;
-        auto solutions = std::vector<MaxIndependentSetSolution<V>>(number_of_graphs);
+        auto solutions = std::vector<MaxIndependentSetSolution<GT::max_edges>>(number_of_graphs);
 
 #pragma omp parallel for
         for (uint64_t instance = 0; instance < number_of_graphs; instance++)
@@ -40,7 +39,7 @@ class MaxIndependentSet
             if (g.is_undirected())
             {
                 undirected_graphs++;
-                solutions[instance] = (solve_single<V, GT>(g));
+                solutions[instance] = (solve_single<GT::max_edges, GT>(g));
             }
         }
 
@@ -51,11 +50,12 @@ class MaxIndependentSet
         }
     }
 
-    template <int V, class GT>
-    MaxIndependentSetSolution<V> solve_single(const graphs::Graph<GT>& g) const
+    template <int M, class GT>
+    MaxIndependentSetSolution<M> solve_single(const graphs::Graph<GT>& g) const
     {
         size_t counter = 0;
         size_t best = 0;
+        constexpr auto V = g.vertices;
 
         auto number_of_solutions = 1 << V;
         for (auto i = 0; i < number_of_solutions; i++)
