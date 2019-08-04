@@ -8,11 +8,8 @@ namespace npim
 
 void run()
 {
-    // auto g = Graph<5>(33554431);
-    // std::cout << g << std::endl;
-
     auto solver = MaxIndependentSet();
-    constexpr int v = 7;
+    constexpr int v = 6;
     solver.solve<graphs::UGraph<v>>();
 }
 
