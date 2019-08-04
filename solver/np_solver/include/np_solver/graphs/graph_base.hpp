@@ -1,6 +1,8 @@
 #pragma once
 #include <bitset>
 #include <stdint.h>
+#include <stack>
+#include <array>
 
 namespace npim
 {
@@ -28,6 +30,26 @@ struct Graph
     bool is_undirected() const
     {
         return static_cast<const SpecificGraph*>(this)->is_undirected();
+    }
+    
+    bool is_connected() const {
+        std::array<bool, vertices> visited = {false};
+        std::stack<int> s;
+        s.push(0);
+
+        auto total = 0;
+        while (!s.empty() && total != vertices) {
+            auto active = s.top();
+            visited[active] = true;
+            s.pop();
+            total++;
+            for (auto i = 0; i<vertices; i++) {
+                if (i != active && !visited[i] && has_edge(active, i)){
+                    s.push(i);
+                }
+            }
+        }
+        return total == vertices;
     }
 
     int index(int v1, int v2) const
