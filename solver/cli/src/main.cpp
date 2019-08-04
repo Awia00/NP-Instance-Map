@@ -12,8 +12,8 @@ void run()
     // std::cout << g << std::endl;
 
     auto solver = MaxIndependentSet();
-    constexpr int v = 7;
-    solver.solve<v, graphs::UGraph<v>>();
+    constexpr int v = 6;
+    solver.solve<graphs::UGraph<v>>();
 }
 
 } // namespace npim

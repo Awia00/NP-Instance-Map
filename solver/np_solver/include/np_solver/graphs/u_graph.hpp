@@ -38,6 +38,8 @@ struct UGraph : Graph<UGraph<V>>
 
     bool has_edge(int v1, int v2) const
     {
+        if (v1 == v2)
+            return false;
         auto vlow = std::min(v1, v2);
         auto vhigh = std::max(v1, v2);
         return edges[index(vhigh, vlow)];

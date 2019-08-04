@@ -14,7 +14,7 @@ class MaxIndependentSet
     {
     }
 
-    template <int V, class GT>
+    template <class GT>
     void solve()
     {
         const uint64_t number_of_graphs = GT::number_of_graphs();
@@ -27,15 +27,16 @@ class MaxIndependentSet
             if (g.is_undirected())
             {
                 undirected_graphs++;
-                solve_single<V, GT>(g);
+                solve_single<GT>(g);
             }
         }
         std::cout << "#undirected graphs " << undirected_graphs << std::endl;
     }
 
-    template <int V, class GT>
+    template <class GT>
     int solve_single(const graphs::Graph<GT>& g) const
     {
+        constexpr auto V = g.vertices();
         size_t counter = 0;
         size_t best = 0;
 
