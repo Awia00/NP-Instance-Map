@@ -49,6 +49,11 @@ struct UGraph : Graph<UGraph<V>>
     {
         return true;
     }
+
+    uint64_t edge_bits() const
+    {
+        return edges.to_ullong();
+    }
 };
 } // namespace graphs
 } // namespace npim

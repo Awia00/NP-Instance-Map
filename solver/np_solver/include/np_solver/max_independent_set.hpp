@@ -2,9 +2,18 @@
 #include <bitset>
 #include <cmath>
 #include <np_solver/graphs/graph_base.hpp>
+#include <vector>
 
 namespace npim
 {
+
+template <int V>
+struct MaxIndependentSetSolution
+{
+    std::bitset<V> graph{ 0 };
+    size_t best{ 0 };
+    size_t number_of_solutions{ 0 };
+};
 
 class MaxIndependentSet
 {
@@ -17,34 +26,38 @@ class MaxIndependentSet
     template <class GT>
     void solve()
     {
+        constexpr auto V = GT::vertices();
         const uint64_t number_of_graphs = GT::number_of_graphs();
+        std::cout << "Processing #" << number_of_graphs << " graphs" << std::endl;
 
         auto undirected_graphs = 0;
+        auto solutions = std::vector<MaxIndependentSetSolution<V>>(number_of_graphs);
+
+#pragma omp parallel for
         for (uint64_t instance = 0; instance < number_of_graphs; instance++)
         {
             auto g = GT(instance);
-            // TODO: find a smarter way to generate instances so we do not have to check for undirectedness.
             if (g.is_undirected())
             {
                 undirected_graphs++;
-                solve_single<GT>(g);
+                solutions[instance] = (solve_single<V, GT>(g));
             }
         }
-        std::cout << "#undirected graphs " << undirected_graphs << std::endl;
+
+        for (const auto& solution : solutions)
+        {
+            std::cout << solution.graph << " " << solution.best << " "
+                      << solution.number_of_solutions << std::endl;
+        }
     }
 
-    template <class GT>
-    int solve_single(const graphs::Graph<GT>& g) const
+    template <int V, class GT>
+    MaxIndependentSetSolution<V> solve_single(const graphs::Graph<GT>& g) const
     {
-        constexpr auto V = g.vertices();
         size_t counter = 0;
         size_t best = 0;
 
         auto number_of_solutions = 1 << V;
-        // std::cout << "G: " << g.edges << std::endl;
-        std::cout << g << std::endl;
-
-        // std::cout << "Solutions:" << std::endl;
         for (auto i = 0; i < number_of_solutions; i++)
         {
             auto solution = std::bitset<V>(i);
@@ -55,9 +68,7 @@ class MaxIndependentSet
                 // std::cout << "  " << solution << " size: " << solution.count() << std::endl;
             }
         }
-        std::cout << "#Solutions: " << counter << ", Best: " << best << std::endl;
-        std::cout << std::endl;
-        return best;
+        return { g.edge_bits(), best, counter };
     }
 
     template <int V, class GT>

@@ -53,6 +53,11 @@ struct DiGraph : Graph<DiGraph<V>>
         }
         return undirected;
     }
+
+    uint64_t edge_bits() const
+    {
+        return edges.to_ullong();
+    }
 };
 
 } // namespace graphs

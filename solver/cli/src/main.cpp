@@ -12,7 +12,7 @@ void run()
     // std::cout << g << std::endl;
 
     auto solver = MaxIndependentSet();
-    constexpr int v = 6;
+    constexpr int v = 7;
     solver.solve<graphs::UGraph<v>>();
 }
 

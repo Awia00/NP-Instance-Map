@@ -36,6 +36,11 @@ struct Graph
     {
         return static_cast<const SpecificGraph*>(this)->index(v1, v2);
     }
+
+    uint64_t edge_bits() const
+    {
+        return static_cast<const SpecificGraph*>(this)->edge_bits();
+    }
 };
 
 template <class T>
