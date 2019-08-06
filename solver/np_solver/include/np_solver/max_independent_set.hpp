@@ -2,22 +2,14 @@
 #include <bitset>
 #include <cmath>
 #include <np_solver/graphs/graph_base.hpp>
+#include <np_solver/solution.hpp>
 #include <vector>
 
 namespace npim
 {
 
-template <int V>
-struct MaxIndependentSetSolution
-{
-    std::bitset<V> graph{ 0 };
-    size_t best{ 0 };
-    size_t number_of_solutions{ 0 };
-};
-
 class MaxIndependentSet
 {
-
     public:
     MaxIndependentSet()
     {
@@ -45,8 +37,11 @@ class MaxIndependentSet
 
         for (const auto& solution : solutions)
         {
-            std::cout << solution.graph << " " << solution.best << " "
-                      << solution.number_of_solutions << std::endl;
+            if (solution.graph != 0)
+            {
+                std::cout << solution.graph << " (" << solution.graph.to_ullong() << ") "
+                          << solution.best << " " << solution.number_of_solutions << std::endl;
+            }
         }
     }
 
