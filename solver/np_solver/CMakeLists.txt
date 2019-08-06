@@ -17,13 +17,13 @@ target_include_directories(${MODULE_NAME}
     INTERFACE 
     include/)
 
-install(
-    DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${SOLUTION_NAME})
-
-
 
 # test executable
 file(GLOB_RECURSE TESTS "tests/*.cpp")
 add_executable(${TEST_NAME} ${TESTS})
 target_link_libraries(${TEST_NAME} ${MODULE_NAME} doctest)
+
+
+install(
+    DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${SOLUTION_NAME})

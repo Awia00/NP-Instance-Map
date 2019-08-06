@@ -30,16 +30,16 @@ struct UGraph : Graph<UGraph<V>>
 
     int index(int v1, int v2) const
     {
-        return v1 * (v1 - 1) / 2 + v2;
+        auto vlow = std::min(v1, v2);
+        auto vhigh = std::max(v1, v2);
+        return vhigh * (vhigh - 1) / 2 + vlow;
     }
 
     bool has_edge(int v1, int v2) const
     {
         if (v1 == v2)
             return false;
-        auto vlow = std::min(v1, v2);
-        auto vhigh = std::max(v1, v2);
-        return edges[index(vhigh, vlow)];
+        return edges[index(v1, v2)];
     }
 
     bool is_undirected() const
