@@ -1,0 +1,30 @@
+# Ignore Everything
+**
+
+# Add in neccesary files/folders
+!/solver/**
+!install_deps.sh
+
+# Leave out the rest
+**/cmake_install.cmake
+**/CTestTestfile.cmake
+**/CMakeCache.txt
+**/CMakeFiles
+**/__pycache__
+**/*.cbp
+**/*.pyc
+**/.clang-format
+**/.gitignore
+**/.gitattributes
+**/.gitmodules
+**/.travis.yml
+**/.dockerignore
+**/Jenkinsfile
+**/Dockerfile*
+**/*.md
+**/docs
+**/*.a
+**/*.so
+**/*.html
+**/*.png
+solver/build/**

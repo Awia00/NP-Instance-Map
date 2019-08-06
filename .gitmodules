@@ -1,0 +1,3 @@
+[submodule "solver/third_party/doctest"]
+	path = solver/third_party/doctest
+	url = git@github.com:onqtam/doctest.git
