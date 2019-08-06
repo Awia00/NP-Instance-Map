@@ -13,7 +13,7 @@ struct DiGraph : Graph<DiGraph<V>>
     constexpr static int max_edges = V * V;
 
     private:
-    const std::bitset<max_edges> edges;
+    std::bitset<max_edges> edges;
 
     public:
     constexpr static uint64_t number_of_graphs()
@@ -28,8 +28,17 @@ struct DiGraph : Graph<DiGraph<V>>
     {
     }
 
+    void set_edge(int v1, int v2, bool val = true)
+    {
+        edges.set(index(v1, v2), val);
+    }
+
     bool has_edge(int v1, int v2) const
     {
+        if (v1 == v2)
+        {
+            return false;
+        }
         return edges[index(v1, v2)];
     }
 

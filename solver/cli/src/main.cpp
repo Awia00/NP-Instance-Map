@@ -1,6 +1,8 @@
 #include <iostream>
+#include <np_solver/dataset_repository.hpp>
 #include <np_solver/graphs/di_graph.hpp>
 #include <np_solver/graphs/u_graph.hpp>
+#include <np_solver/isomorphism.hpp>
 #include <np_solver/max_independent_set.hpp>
 
 namespace npim
@@ -9,7 +11,7 @@ namespace npim
 void run()
 {
     auto solver = MaxIndependentSet();
-    constexpr int v = 6;
+    constexpr int v = 4;
     solver.solve<graphs::UGraph<v>>();
 }
 

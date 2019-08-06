@@ -13,7 +13,7 @@ struct UGraph : Graph<UGraph<V>>
     constexpr static int max_edges = ((V * (V - 1)) / 2);
 
     private:
-    const std::bitset<max_edges> edges;
+    std::bitset<max_edges> edges;
 
     public:
     constexpr static uint64_t number_of_graphs()
@@ -33,6 +33,11 @@ struct UGraph : Graph<UGraph<V>>
         auto vlow = std::min(v1, v2);
         auto vhigh = std::max(v1, v2);
         return vhigh * (vhigh - 1) / 2 + vlow;
+    }
+
+    void set_edge(int v1, int v2, bool val = true)
+    {
+        edges.set(index(v1, v2), val);
     }
 
     bool has_edge(int v1, int v2) const

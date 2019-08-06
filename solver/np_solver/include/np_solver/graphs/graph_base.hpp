@@ -1,8 +1,9 @@
 #pragma once
-#include <bitset>
-#include <stdint.h>
-#include <stack>
 #include <array>
+#include <bitset>
+#include <iostream>
+#include <stack>
+#include <stdint.h>
 
 namespace npim
 {
@@ -22,6 +23,11 @@ struct Graph
 
     //
 
+    void set_edge(int v1, int v2, bool val = true)
+    {
+        static_cast<SpecificGraph*>(this)->set_edge(v1, v2, val);
+    }
+
     bool has_edge(int v1, int v2) const
     {
         return static_cast<const SpecificGraph*>(this)->has_edge(v1, v2);
@@ -31,20 +37,24 @@ struct Graph
     {
         return static_cast<const SpecificGraph*>(this)->is_undirected();
     }
-    
-    bool is_connected() const {
-        std::array<bool, vertices> visited = {false};
+
+    bool is_connected() const
+    {
+        std::array<bool, vertices> visited = { false };
         std::stack<int> s;
         s.push(0);
 
         auto total = 0;
-        while (!s.empty() && total != vertices) {
+        while (!s.empty() && total != vertices)
+        {
             auto active = s.top();
             visited[active] = true;
             s.pop();
             total++;
-            for (auto i = 0; i<vertices; i++) {
-                if (i != active && !visited[i] && has_edge(active, i)){
+            for (auto i = 0; i < vertices; i++)
+            {
+                if (i != active && !visited[i] && has_edge(active, i))
+                {
                     s.push(i);
                 }
             }
@@ -66,7 +76,7 @@ struct Graph
 template <class T>
 std::ostream& operator<<(std::ostream& os, const Graph<T>& obj)
 {
-    auto v = obj.vertices();
+    auto v = obj.vertices;
     os << "G(V=" << v << ", E={" << std::endl;
     for (auto i = 0; i < v; i++)
     {
