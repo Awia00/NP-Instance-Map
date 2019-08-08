@@ -5,20 +5,25 @@ namespace npim
 {
 namespace graphs
 {
-
 template <int V>
 struct DiGraph : Graph<DiGraph<V>>
 {
-    constexpr static int vertices = V;
-    constexpr static int max_edges = V * V;
+    constexpr const static int vertices()
+    {
+        return V;
+    }
+    constexpr const static int max_edges()
+    {
+        return V * V;
+    }
 
     private:
-    const std::bitset<max_edges> edges;
+    const std::bitset<max_edges()> edges;
 
     public:
     constexpr static uint64_t number_of_graphs()
     {
-        return 1ULL << (max_edges);
+        return 1ULL << (max_edges());
     }
     /**
      * edge_combination_bit is the number describing the bits that represent the activated edges.
@@ -57,6 +62,5 @@ struct DiGraph : Graph<DiGraph<V>>
         return edges.to_ullong();
     }
 };
-
 } // namespace graphs
 } // namespace npim

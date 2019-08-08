@@ -7,7 +7,6 @@
 
 namespace npim
 {
-
 class MaxIndependentSet
 {
     public:
@@ -22,7 +21,7 @@ class MaxIndependentSet
         std::cout << "Processing #" << number_of_graphs << " graphs" << std::endl;
 
         auto undirected_graphs = 0;
-        auto solutions = std::vector<MaxIndependentSetSolution<GT::max_edges>>(number_of_graphs);
+        auto solutions = std::vector<MaxIndependentSetSolution<GT::max_edges()>>(number_of_graphs);
 
 #pragma omp parallel for
         for (uint64_t instance = 0; instance < number_of_graphs; instance++)
@@ -31,7 +30,7 @@ class MaxIndependentSet
             if (g.is_undirected())
             {
                 undirected_graphs++;
-                solutions[instance] = (solve_single<GT::max_edges, GT>(g));
+                solutions[instance] = (solve_single<GT::max_edges(), GT>(g));
             }
         }
 
@@ -50,7 +49,7 @@ class MaxIndependentSet
     {
         size_t counter = 0;
         size_t best = 0;
-        constexpr auto V = g.vertices;
+        constexpr auto V = g.vertices();
 
         auto number_of_solutions = 1 << V;
         for (auto i = 0; i < number_of_solutions; i++)
@@ -85,5 +84,4 @@ class MaxIndependentSet
         return true;
     }
 };
-
 } // namespace npim

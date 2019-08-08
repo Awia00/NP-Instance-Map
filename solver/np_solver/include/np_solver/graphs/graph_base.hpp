@@ -1,8 +1,8 @@
 #pragma once
-#include <bitset>
-#include <stdint.h>
-#include <stack>
 #include <array>
+#include <bitset>
+#include <stack>
+#include <stdint.h>
 
 namespace npim
 {
@@ -12,8 +12,14 @@ template <class SpecificGraph>
 struct Graph
 {
     public:
-    constexpr static int vertices = SpecificGraph::vertices;
-    constexpr static uint64_t max_edges = SpecificGraph::max_edges;
+    constexpr const static int vertices()
+    {
+        return SpecificGraph::vertices();
+    }
+    constexpr const static int max_edges()
+    {
+        return SpecificGraph::max_edges();
+    }
 
     constexpr static uint64_t number_of_graphs()
     {
@@ -31,20 +37,24 @@ struct Graph
     {
         return static_cast<const SpecificGraph*>(this)->is_undirected();
     }
-    
-    bool is_connected() const {
-        std::array<bool, vertices> visited = {false};
+
+    bool is_connected() const
+    {
+        std::array<bool, vertices> visited = { false };
         std::stack<int> s;
         s.push(0);
 
         auto total = 0;
-        while (!s.empty() && total != vertices) {
+        while (!s.empty() && total != vertices)
+        {
             auto active = s.top();
             visited[active] = true;
             s.pop();
             total++;
-            for (auto i = 0; i<vertices; i++) {
-                if (i != active && !visited[i] && has_edge(active, i)){
+            for (auto i = 0; i < vertices; i++)
+            {
+                if (i != active && !visited[i] && has_edge(active, i))
+                {
                     s.push(i);
                 }
             }
