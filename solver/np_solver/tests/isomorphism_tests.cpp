@@ -75,14 +75,14 @@ TEST_SUITE("swap")
     TEST_CASE("All zeros DiGraph")
     {
         graphs::DiGraph<5> g_original = graphs::DiGraph<5>(0);
-        graphs::DiGraph<5> g_modify = graphs::DiGraph<5>(0);
+        graphs::DiGraph<5> g_modify = g_original.clone();
         check_when_swap_has_no_change(g_original, g_modify);
     }
 
     TEST_CASE("All zeros UGraph")
     {
         graphs::UGraph<5> g_original = graphs::UGraph<5>(0);
-        graphs::UGraph<5> g_modify = graphs::UGraph<5>(0);
+        graphs::UGraph<5> g_modify = g_original.clone();
         check_when_swap_has_no_change(g_original, g_modify);
     }
 
@@ -90,21 +90,21 @@ TEST_SUITE("swap")
     TEST_CASE("All ones DiGraph")
     {
         auto g_original = graphs::DiGraph<5>(graphs::DiGraph<5>::number_of_graphs() - 1);
-        auto g_modify = graphs::DiGraph<5>(graphs::DiGraph<5>::number_of_graphs() - 1);
+        auto g_modify = g_original.clone();
         check_when_swap_has_no_change(g_original, g_modify);
     }
 
     TEST_CASE("All ones UGraph")
     {
         auto g_original = graphs::DiGraph<5>(graphs::UGraph<5>::number_of_graphs() - 1);
-        auto g_modify = graphs::DiGraph<5>(graphs::UGraph<5>::number_of_graphs() - 1);
+        auto g_modify = g_original.clone();
         check_when_swap_has_no_change(g_original, g_modify);
     }
 
     TEST_CASE("Last index only DiGraph")
     {
         auto g_original = graphs::DiGraph<5>(graphs::DiGraph<5>::number_of_graphs() / 2);
-        auto g_modify = graphs::DiGraph<5>(graphs::DiGraph<5>::number_of_graphs() / 2);
+        auto g_modify = g_original.clone();
         auto service = IsomorphismService();
 
         service.swap(g_modify, 2, 4);
@@ -114,7 +114,7 @@ TEST_SUITE("swap")
     TEST_CASE("Last index only UGraph")
     {
         auto g_original = graphs::UGraph<5>(graphs::UGraph<5>::number_of_graphs() / 2);
-        auto g_modify = graphs::UGraph<5>(graphs::UGraph<5>::number_of_graphs() / 2);
+        auto g_modify = g_original.clone();
         auto service = IsomorphismService();
 
         service.swap(g_modify, 2, 4);
@@ -124,28 +124,28 @@ TEST_SUITE("swap")
     TEST_CASE("Swap reverse DiGraph")
     {
         auto g_original = graphs::DiGraph<5>(10503);
-        auto g_modify = graphs::DiGraph<5>(10503);
+        auto g_modify = g_original.clone();
         check_swap_reverse_has_no_effect(g_original, g_modify);
     }
 
     TEST_CASE("Swap reverse UGraph")
     {
         auto g_original = graphs::UGraph<5>(503);
-        auto g_modify = graphs::UGraph<5>(503);
+        auto g_modify = g_original.clone();
         check_swap_reverse_has_no_effect(g_original, g_modify);
     }
 
     TEST_CASE("Swap circle DiGraph")
     {
         auto g_original = graphs::DiGraph<5>(10503);
-        auto g_modify = graphs::DiGraph<5>(10503);
+        auto g_modify = g_original.clone();
         check_swap_circle_has_no_effect(g_original, g_modify);
     }
 
     TEST_CASE("Swap circle UGraph")
     {
         auto g_original = graphs::UGraph<5>(503);
-        auto g_modify = graphs::UGraph<5>(503);
+        auto g_modify = g_original.clone();
         check_swap_circle_has_no_effect(g_original, g_modify);
     }
 }
