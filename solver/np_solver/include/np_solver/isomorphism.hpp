@@ -8,14 +8,13 @@ class IsomorphismService
 {
     public:
     template <typename GT>
-    void swap(graphs::Graph<GT>& g, int v1, int v2) const
+    void swap(const graphs::Graph<GT>& from, graphs::Graph<GT>& g, int v1, int v2) const
     {
         if (v1 == v2)
         {
             return;
         }
 
-        const GT from = g.clone();
         for (auto i = 0; i < GT::vertices(); i++)
         {
             g.set_edge(i, v2, from.has_edge(i, v1));
@@ -25,6 +24,18 @@ class IsomorphismService
         {
             g.set_edge(v1, v2, from.has_edge(v1, v2)); // case for UGraphs
         }
+    }
+
+    template <typename GT>
+    void swap(graphs::Graph<GT>& g, int v1, int v2) const
+    {
+        if (v1 == v2)
+        {
+            return;
+        }
+
+        const GT from = g.clone();
+        swap(from, g, v1, v2);
     }
 
     template <typename GT>

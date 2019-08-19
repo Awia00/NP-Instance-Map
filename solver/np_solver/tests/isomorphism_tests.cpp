@@ -111,7 +111,7 @@ TEST_SUITE("swap")
         CHECK(g_original.edge_bits() != g_modify.edge_bits());
     }
 
-    TEST_CASE("Last index only UGraph")
+    TEST_CASE("Last index only UGraph swap has effect")
     {
         auto g_original = graphs::UGraph<5>(graphs::UGraph<5>::number_of_graphs() / 2);
         auto g_modify = g_original.clone();
