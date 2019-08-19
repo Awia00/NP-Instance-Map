@@ -149,4 +149,71 @@ TEST_SUITE("swap")
         check_swap_circle_has_no_effect(g_original, g_modify);
     }
 }
+
+TEST_SUITE("base_form")
+{
+    TEST_CASE("Zero is base form")
+    {
+        auto g_original = graphs::UGraph<5>(0);
+        auto service = IsomorphismService();
+        auto result = service.base_form(g_original);
+        CHECK(g_original.edge_bits() == result.edge_bits());
+    }
+
+    TEST_CASE("All one is base form")
+    {
+        auto g_original = graphs::UGraph<5>(graphs::UGraph<5>::number_of_graphs() - 1);
+        auto service = IsomorphismService();
+        auto result = service.base_form(g_original);
+        CHECK(g_original.edge_bits() == result.edge_bits());
+    }
+
+    TEST_CASE("Last one to first one")
+    {
+        auto g_original = graphs::UGraph<5>(graphs::UGraph<5>::number_of_graphs() / 2);
+        auto service = IsomorphismService();
+        auto result = service.base_form(g_original);
+        CHECK(result.edge_bits() == 1);
+    }
+
+    TEST_CASE("Base always lower or equal 1")
+    {
+        auto service = IsomorphismService();
+        for (u_int64_t i = 0; i < graphs::UGraph<5>::number_of_graphs(); i++)
+        {
+            auto g_original = graphs::UGraph<5>(i);
+            auto result = service.base_form(g_original);
+            CHECK(result.edge_bits() <= i);
+        }
+    }
+
+    // TEST_CASE("swap gives same base [Difficult]")
+    // {
+    //     auto service = IsomorphismService();
+    //     auto g_original = graphs::UGraph<5>(938);
+
+    //     auto result_before_swap = service.base_form(g_original);
+    //     service.swap(g_original, 0, 2);
+    //     auto result = service.base_form(g_original);
+    //     std::cout << "Before: " << result_before_swap << std::endl;
+    //     std::cout << "After: " << result << std::endl;
+    //     CHECK(result.edge_bits() == result_before_swap.edge_bits());
+    // }
+
+    // TEST_CASE("swap gives same base [ALL]")
+    // {
+    //     auto service = IsomorphismService();
+    //     for (u_int64_t i = 0; i < graphs::UGraph<5>::number_of_graphs(); i++)
+    //     {
+    //         auto g_original = graphs::UGraph<5>(i);
+
+    //         auto result_before_swap = service.base_form(g_original);
+    //         service.swap(g_original, 0, 2);
+    //         auto result = service.base_form(g_original);
+
+    //         CHECK(result.edge_bits() == result_before_swap.edge_bits());
+    //         std::cout << i << std::endl;
+    //     }
+    // }
+}
 } // namespace npim

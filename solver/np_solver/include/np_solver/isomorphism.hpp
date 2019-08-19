@@ -38,6 +38,39 @@ class IsomorphismService
         swap(from, g, v1, v2);
     }
 
+
+    template <typename GT>
+    GT base_form(const graphs::Graph<GT>& base)
+    {
+        auto result = base.clone();
+        bool has_changed = true;
+        while (has_changed)
+        {
+            std::cout << result << std::endl;
+            has_changed = false;
+            for (auto i = 0; i < GT::vertices(); i++)
+            {
+                for (auto j = 0; j < GT::vertices(); j++)
+                {
+                    auto new_graph = result.clone();
+                    swap(result, new_graph, i, j);
+                    if (new_graph.edge_bits() < result.edge_bits())
+                    {
+                        // std::cout << "(" << i << ", " << j << ")" << std::endl;
+                        result = new_graph;
+                        has_changed = true;
+                        break;
+                    }
+                }
+                if (has_changed)
+                {
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
     template <typename GT>
     bool are_isomorphic(const graphs::Graph<GT>& a, const graphs::Graph<GT>& b) const
     {
@@ -45,15 +78,9 @@ class IsomorphismService
         //  to B.
         // A mapping is a swap of both row and col of the two swapping vertices.
         //  Values on the identity diagonal are copied to the others previous diagonal index.
-
-        auto v = GT::vertices;
-        auto number_of_mappings = 1ULL << (v * (v - 1)) / 2;
-        for (auto i = 0; i < number_of_mappings; i++)
-        {
-            // find out which to swap (based on i)
-        }
-
-        return true;
+        auto base_a = base_form(a);
+        auto base_b = base_form(b);
+        return base_a == base_b;
     }
 
     void online_isomorphism() const
