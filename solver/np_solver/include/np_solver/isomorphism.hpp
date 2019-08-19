@@ -95,10 +95,6 @@ class IsomorphismService
     template <typename GT>
     bool are_isomorphic(const graphs::Graph<GT>& a, const graphs::Graph<GT>& b) const
     {
-        // run all combinations of mappings of the vertices in A, and check if the bitset is equal
-        //  to B.
-        // A mapping is a swap of both row and col of the two swapping vertices.
-        //  Values on the identity diagonal are copied to the others previous diagonal index.
         auto base_a = base_form(a);
         auto base_b = base_form(b);
         return base_a == base_b;
