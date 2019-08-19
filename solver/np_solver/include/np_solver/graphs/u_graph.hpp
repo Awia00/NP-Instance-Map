@@ -33,6 +33,12 @@ struct UGraph : Graph<UGraph<V>>
     {
     }
 
+    UGraph<V> clone() const
+    {
+        return UGraph<V>(edge_bits());
+    }
+
+
     int index(int v1, int v2) const
     {
         auto vlow = std::min(v1, v2);
@@ -42,13 +48,19 @@ struct UGraph : Graph<UGraph<V>>
 
     void set_edge(int v1, int v2, bool val = true)
     {
+        if (v1 == v2)
+        {
+            return;
+        }
         edges.set(index(v1, v2), val);
     }
 
     bool has_edge(int v1, int v2) const
     {
         if (v1 == v2)
+        {
             return false;
+        }
         return edges[index(v1, v2)];
     }
 

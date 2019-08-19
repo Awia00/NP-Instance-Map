@@ -1,5 +1,6 @@
 #pragma once
 #include <np_solver/graphs/graph_base.hpp>
+#include <np_solver/graphs/u_graph.hpp>
 
 namespace npim
 {
@@ -7,20 +8,23 @@ class IsomorphismService
 {
     public:
     template <typename GT>
-    void swap(const graphs::Graph<GT>& from, graphs::Graph<GT>& to, int v1, int v2) const
+    void swap(graphs::Graph<GT>& g, int v1, int v2) const
     {
-        for (auto i = 0; i < GT::vertices; i++)
+        if (v1 == v2)
         {
-            to.set_edge(i, v2, from.has_edge(i, v1));
-            to.set_edge(i, v1, from.has_edge(i, v2));
-
-            // to.set_edge(v2, i, from.has_edge(v1, i));
-            // to.set_edge(v1, i, from.has_edge(v2, i));
+            return;
         }
-        std::cout << from << std::endl;
-        std::cout << to << std::endl;
-        // Swap the column of v1, and v2, and row of v1 and v2.
-        // from and to are simply to avoid overriding
+
+        const GT from = g.clone();
+        for (auto i = 0; i < GT::vertices(); i++)
+        {
+            g.set_edge(i, v2, from.has_edge(i, v1));
+            g.set_edge(i, v1, from.has_edge(i, v2));
+        }
+        if constexpr (std::is_same<GT, graphs::UGraph<GT::vertices()>>())
+        {
+            g.set_edge(v1, v2, from.has_edge(v1, v2)); // case for UGraphs
+        }
     }
 
     template <typename GT>

@@ -29,8 +29,13 @@ struct DiGraph : Graph<DiGraph<V>>
      * edge_combination_bit is the number describing the bits that represent the activated edges.
      * For zero edges use 0, for all edges use 2^V -1, which coincidently also is the number of unique graphs.
      */
-    DiGraph(uint64_t edge_combination_bit) : edges(std::bitset<max_edges>(edge_combination_bit))
+    DiGraph(uint64_t edge_combination_bit) : edges(std::bitset<max_edges()>(edge_combination_bit))
     {
+    }
+
+    DiGraph<V> clone() const
+    {
+        return DiGraph<V>(edge_bits());
     }
 
     void set_edge(int v1, int v2, bool val = true)

@@ -9,9 +9,9 @@ TEST_SUITE("has_edge")
     TEST_CASE("Empty graph")
     {
         auto g = graphs::DiGraph<5>(0);
-        for (auto i = 0; i < g.vertices; i++)
+        for (auto i = 0; i < g.vertices(); i++)
         {
-            for (auto j = 0; j < g.vertices; j++)
+            for (auto j = 0; j < g.vertices(); j++)
             {
                 CHECK(!g.has_edge(i, j));
             }
@@ -21,9 +21,9 @@ TEST_SUITE("has_edge")
     TEST_CASE("Fully Connected Graph")
     {
         auto g = graphs::DiGraph<5>(graphs::DiGraph<5>::number_of_graphs() - 1); // all ones
-        for (auto i = 0; i < g.vertices; i++)
+        for (auto i = 0; i < g.vertices(); i++)
         {
-            for (auto j = 0; j < g.vertices; j++)
+            for (auto j = 0; j < g.vertices(); j++)
             {
                 CHECK(g.has_edge(i, j));
             }
@@ -35,10 +35,10 @@ TEST_SUITE("set_edge")
 {
     TEST_CASE("can set_edge")
     {
-        auto g = graphs::DiGraph<5>(503);
-        for (auto i = 0; i < g.vertices; i++)
+        auto g = graphs::DiGraph<5>(10503);
+        for (auto i = 0; i < g.vertices(); i++)
         {
-            for (auto j = 0; j < g.vertices; j++)
+            for (auto j = 0; j < g.vertices(); j++)
             {
                 auto before = g.has_edge(i, j);
                 g.set_edge(i, j, !before);
@@ -50,10 +50,10 @@ TEST_SUITE("set_edge")
 
     TEST_CASE("set_edge reversible")
     {
-        auto g = graphs::DiGraph<5>(503);
-        for (auto i = 0; i < g.vertices; i++)
+        auto g = graphs::DiGraph<5>(10503);
+        for (auto i = 0; i < g.vertices(); i++)
         {
-            for (auto j = 0; j < g.vertices; j++)
+            for (auto j = 0; j < g.vertices(); j++)
             {
                 auto before = g.has_edge(i, j);
                 g.set_edge(i, j, !before);
