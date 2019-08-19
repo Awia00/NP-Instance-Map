@@ -1,6 +1,8 @@
 #pragma once
 #include <np_solver/graphs/graph_base.hpp>
 #include <np_solver/graphs/u_graph.hpp>
+#include <tuple>
+#include <vector>
 
 namespace npim
 {
@@ -42,30 +44,35 @@ class IsomorphismService
     template <typename GT>
     GT base_form(const graphs::Graph<GT>& base)
     {
-        auto result = base.clone();
-        bool has_changed = true;
-        while (has_changed)
+        auto swaps_set = std::vector<std::vector<std::tuple<int, int>>>();
+        swaps_set.push_back({});
+
+        for (auto i = 0; i < GT::vertices(); i++)
         {
-            std::cout << result << std::endl;
-            has_changed = false;
-            for (auto i = 0; i < GT::vertices(); i++)
+            auto size = (int)swaps_set.size();
+            for (auto j = i + 1; j < GT::vertices(); j++)
             {
-                for (auto j = 0; j < GT::vertices(); j++)
+                for (auto k = 0; k < size; k++)
                 {
-                    auto new_graph = result.clone();
-                    swap(result, new_graph, i, j);
-                    if (new_graph.edge_bits() < result.edge_bits())
-                    {
-                        // std::cout << "(" << i << ", " << j << ")" << std::endl;
-                        result = new_graph;
-                        has_changed = true;
-                        break;
-                    }
+                    std::vector<std::tuple<int, int>> with = swaps_set[k];
+                    with.push_back(std::make_tuple(i, j));
+                    swaps_set.push_back(with);
                 }
-                if (has_changed)
-                {
-                    break;
-                }
+            }
+        }
+        auto result = base.clone();
+        for (const auto& swaps : swaps_set)
+        {
+            auto swapped = base.clone();
+            for (const auto& swap : swaps)
+            {
+                int v1 = std::get<0>(swap);
+                int v2 = std::get<1>(swap);
+                this->swap(swapped, v1, v2);
+            }
+            if (swapped.edge_bits() < result.edge_bits())
+            {
+                result = swapped;
             }
         }
         return result;
