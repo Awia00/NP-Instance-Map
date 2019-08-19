@@ -8,6 +8,18 @@ namespace npim
 {
 class IsomorphismService
 {
+    private:
+    template <int value>
+    constexpr u_int64_t factorial()
+    {
+        u_int64_t result = value;
+        for (auto i = value - 1; i >= 1; i--)
+        {
+            result *= i;
+        }
+        return result;
+    }
+
     public:
     template <typename GT>
     void swap(const graphs::Graph<GT>& from, graphs::Graph<GT>& g, int v1, int v2) const
@@ -45,6 +57,7 @@ class IsomorphismService
     GT base_form(const graphs::Graph<GT>& base)
     {
         auto swaps_set = std::vector<std::vector<std::tuple<int, int>>>();
+        swaps_set.reserve(this->factorial<base.vertices()>());
         swaps_set.push_back({});
 
         for (auto i = 0; i < GT::vertices(); i++)
@@ -61,6 +74,7 @@ class IsomorphismService
             }
         }
         auto result = base.clone();
+
         for (const auto& swaps : swaps_set)
         {
             auto swapped = base.clone();
