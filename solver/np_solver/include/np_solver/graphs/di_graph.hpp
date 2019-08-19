@@ -40,10 +40,6 @@ struct DiGraph : Graph<DiGraph<V>>
 
     bool has_edge(int v1, int v2) const
     {
-        if (v1 == v2)
-        {
-            return false;
-        }
         return edges[index(v1, v2)];
     }
 
