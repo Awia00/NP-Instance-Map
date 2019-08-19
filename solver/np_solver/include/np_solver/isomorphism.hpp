@@ -99,17 +99,5 @@ class IsomorphismService
         auto base_b = base_form(b);
         return base_a == base_b;
     }
-
-    void online_isomorphism() const
-    {
-        // Create set of isomorhic graphs
-        //
-    }
-
-
-    // TODO:
-    // - function which checks if a new graphs is isomorphic with any previous graph.
-    //     - should be possible online: keep a set of the bitset integers of all seen isomorphic graphs. Swap only the row/col of the outermost vertex, with all other vertices. Check each of these against the set.
-    // note I have only looked at this for undirected graphs.
 };
 } // namespace npim

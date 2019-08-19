@@ -3,14 +3,19 @@
 #include <cmath>
 #include <np_solver/graphs/graph_base.hpp>
 #include <np_solver/solution.hpp>
+#include <unordered_set>
 #include <vector>
 
 namespace npim
 {
 class MaxIndependentSet
 {
+    private:
+    const std::shared_ptr<IsomorphismService> isomorph_service;
+
     public:
-    MaxIndependentSet()
+    MaxIndependentSet(std::shared_ptr<IsomorphismService> isomorph_service)
+      : isomorph_service(std::move(isomorph_service))
     {
     }
 
@@ -23,10 +28,16 @@ class MaxIndependentSet
         auto undirected_graphs = 0;
         auto solutions = std::vector<MaxIndependentSetSolution<GT::max_edges()>>(number_of_graphs);
 
-#pragma omp parallel for
+        auto iso_set = std::unordered_set<u_int64_t>();
         for (uint64_t instance = 0; instance < number_of_graphs; instance++)
         {
             auto g = GT(instance);
+            auto base_graph = isomorph_service->base_form(g);
+            if (iso_set.find(base_graph.edge_bits()) != iso_set.end())
+            {
+                continue;
+            }
+            iso_set.insert(base_graph.edge_bits());
             if (g.is_undirected())
             {
                 undirected_graphs++;
@@ -34,14 +45,17 @@ class MaxIndependentSet
             }
         }
 
+        auto counter = 0;
         for (const auto& solution : solutions)
         {
             if (solution.graph != 0)
             {
+                counter++;
                 std::cout << solution.graph << " (" << solution.graph.to_ullong() << ") "
                           << solution.best << " " << solution.number_of_solutions << std::endl;
             }
         }
+        std::cout << counter << std::endl;
     }
 
     template <int M, class GT>

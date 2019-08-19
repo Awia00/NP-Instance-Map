@@ -10,8 +10,9 @@ namespace npim
 
 void run()
 {
-    auto solver = MaxIndependentSet();
-    constexpr int v = 4;
+    auto iso_service = std::make_shared<IsomorphismService>();
+    auto solver = MaxIndependentSet(iso_service);
+    constexpr int v = 5;
     solver.solve<graphs::UGraph<v>>();
 }
 
