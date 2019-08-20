@@ -1,6 +1,7 @@
 #pragma once
 #include <array>
 #include <bitset>
+#include <iostream>
 #include <stack>
 #include <stdint.h>
 
@@ -26,7 +27,15 @@ struct Graph
         return SpecificGraph::number_of_graphs();
     }
 
-    //
+    SpecificGraph clone() const
+    {
+        return static_cast<const SpecificGraph*>(this)->clone();
+    }
+
+    void set_edge(int v1, int v2, bool val = true)
+    {
+        static_cast<SpecificGraph*>(this)->set_edge(v1, v2, val);
+    }
 
     bool has_edge(int v1, int v2) const
     {
@@ -40,18 +49,18 @@ struct Graph
 
     bool is_connected() const
     {
-        std::array<bool, vertices> visited = { false };
+        std::array<bool, vertices()> visited = { false };
         std::stack<int> s;
         s.push(0);
 
         auto total = 0;
-        while (!s.empty() && total != vertices)
+        while (!s.empty() && total != vertices())
         {
             auto active = s.top();
             visited[active] = true;
             s.pop();
             total++;
-            for (auto i = 0; i < vertices; i++)
+            for (auto i = 0; i < vertices(); i++)
             {
                 if (i != active && !visited[i] && has_edge(active, i))
                 {
@@ -59,7 +68,7 @@ struct Graph
                 }
             }
         }
-        return total == vertices;
+        return total == vertices();
     }
 
     int index(int v1, int v2) const
