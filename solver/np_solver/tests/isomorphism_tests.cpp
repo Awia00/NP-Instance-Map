@@ -179,7 +179,7 @@ TEST_SUITE("base_form")
     TEST_CASE("Base always lower or equal 1")
     {
         auto service = IsomorphismService();
-        for (u_int64_t i = 0; i < graphs::UGraph<5>::number_of_graphs(); i++)
+        for (uint64_t i = 0; i < graphs::UGraph<5>::number_of_graphs(); i++)
         {
             auto g_original = graphs::UGraph<5>(i);
             auto result = service.base_form(g_original);
@@ -212,7 +212,7 @@ TEST_SUITE("base_form")
     TEST_CASE("swap gives same base [ALL]")
     {
         auto service = IsomorphismService();
-        for (u_int64_t i = 0; i < graphs::UGraph<5>::number_of_graphs(); i++)
+        for (uint64_t i = 0; i < graphs::UGraph<5>::number_of_graphs(); i++)
         {
             auto g_original = graphs::UGraph<5>(i);
 

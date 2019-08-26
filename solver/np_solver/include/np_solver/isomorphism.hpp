@@ -10,9 +10,9 @@ class IsomorphismService
 {
     private:
     template <int value>
-    constexpr u_int64_t factorial()
+    constexpr uint64_t factorial()
     {
-        u_int64_t result = value;
+        uint64_t result = value;
         for (auto i = value - 1; i >= 1; i--)
         {
             result *= i;

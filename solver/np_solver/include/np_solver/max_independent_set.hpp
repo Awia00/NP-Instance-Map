@@ -5,6 +5,7 @@
 #include <np_solver/solution.hpp>
 #include <unordered_set>
 #include <vector>
+#include <optional>
 
 namespace npim
 {
@@ -22,34 +23,29 @@ class MaxIndependentSet
     template <class GT>
     void solve()
     {
-        const uint64_t number_of_graphs = GT::number_of_graphs();
+        constexpr uint64_t number_of_graphs = GT::number_of_graphs();
         std::cout << "Processing #" << number_of_graphs << " graphs" << std::endl;
 
-        auto undirected_graphs = 0;
-        auto solutions = std::vector<MaxIndependentSetSolution<GT::max_edges()>>(number_of_graphs);
+        auto solutions = std::vector<std::optional<MaxIndependentSetSolution<GT::max_edges()>>>(number_of_graphs);
 
-        auto iso_set = std::unordered_set<u_int64_t>();
+        auto iso_set = std::unordered_set<uint64_t>();
         for (uint64_t instance = 0; instance < number_of_graphs; instance++)
         {
-            auto g = GT(instance);
-            auto base_graph = isomorph_service->base_form(g);
-            if (iso_set.find(base_graph.edge_bits()) != iso_set.end())
+            auto g = isomorph_service->base_form(GT(instance));
+            if (iso_set.find(g.edge_bits()) != iso_set.end())
             {
                 continue;
             }
-            iso_set.insert(base_graph.edge_bits());
-            if (g.is_undirected())
-            {
-                undirected_graphs++;
-                solutions[instance] = (solve_single<GT::max_edges(), GT>(g));
-            }
+            iso_set.insert(g.edge_bits());
+            solutions[instance] = { solve_single<GT::max_edges(), GT>(g) };
         }
 
         auto counter = 0;
-        for (const auto& solution : solutions)
+        for (const auto& opt_solution : solutions)
         {
-            if (solution.graph != 0)
+            if (opt_solution)
             {
+                auto solution = opt_solution.value();
                 counter++;
                 std::cout << solution.graph << " (" << solution.graph.to_ullong() << ") "
                           << solution.best << " " << solution.number_of_solutions << std::endl;
