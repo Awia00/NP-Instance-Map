@@ -11,7 +11,7 @@ namespace npim
 
 void run()
 {
-    for (auto g : graphs::GraphsRange<graphs::UGraph<5>>(0, 5))
+    for (auto g : graphs::GraphsRange<graphs::GraphIterator<graphs::UGraph<4>>>(0, 5))
     {
         std::cout << g << std::endl;
 	}

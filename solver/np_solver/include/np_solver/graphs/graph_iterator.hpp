@@ -1,5 +1,7 @@
 #pragma once
 #include "graph_base.hpp"
+#include "u_graph.hpp"
+#include "di_graph.hpp"
 #include <iterator>
 
 namespace npim
@@ -7,7 +9,6 @@ namespace npim
 
 namespace graphs
 {
-
 
 template <class SpecificGraph>
 class GraphIterator
@@ -71,7 +72,7 @@ class GraphIterator
     }
 };
 
-template <class SpecificGraph>
+template <class GraphIterator>
 class GraphsRange
 {
     private:
@@ -83,16 +84,23 @@ class GraphsRange
     {
     }
 
-    GraphIterator<SpecificGraph> begin()
+    GraphIterator begin()
     {
-        return GraphIterator<SpecificGraph>(start_);
+        return GraphIterator(start_);
     }
-    GraphIterator<SpecificGraph> end()
+
+    GraphIterator end()
     {
-        return GraphIterator<SpecificGraph>(end_);
+        return GraphIterator(end_);
     }
 };
 
+
+template <int V>
+typename GraphIterator<UGraph<V>> UGraphIterator;
+
+template <int V>
+typename GraphIterator<DiGraph<V>> DiGraphIterator;
 
 } // namespace graphs
 }
