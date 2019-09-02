@@ -4,16 +4,22 @@
 #include <np_solver/graphs/u_graph.hpp>
 #include <np_solver/isomorphism.hpp>
 #include <np_solver/max_independent_set.hpp>
+#include <np_solver/graphs/graph_iterator.hpp>
 
 namespace npim
 {
 
 void run()
 {
-    auto iso_service = std::make_shared<IsomorphismService>();
-    auto solver = MaxIndependentSet(iso_service);
-    constexpr int v = 5;
-    solver.solve<graphs::UGraph<v>>();
+    for (auto g : graphs::GraphsRange<graphs::UGraph<5>>(0, 5))
+    {
+        std::cout << g << std::endl;
+	}
+
+    //auto iso_service = std::make_shared<IsomorphismService>();
+    //auto solver = MaxIndependentSet(iso_service);
+    //constexpr int v = 5;
+    //solver.solve<graphs::UGraph<v>>();
 }
 
 } // namespace npim
