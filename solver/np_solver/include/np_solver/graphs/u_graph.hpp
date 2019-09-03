@@ -74,5 +74,6 @@ struct UGraph : Graph<UGraph<V>>
         return edges.to_ullong();
     }
 };
+
 } // namespace graphs
 } // namespace npim

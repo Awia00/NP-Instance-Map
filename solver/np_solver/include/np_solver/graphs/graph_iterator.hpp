@@ -16,21 +16,6 @@ class GraphIterator
     private:
     int value_;
 
-    class GraphHolder
-    {
-        Graph<SpecificGraph> value_;
-
-        public:
-        GraphHolder(const Graph<SpecificGraph>& value) : value_(value)
-        {
-        }
-
-        Graph<SpecificGraph> operator*()
-        {
-            return value_;
-        }
-    };
-
     public:
     // Previously provided by std::iterator - see update below
     typedef Graph<SpecificGraph> value_type;
@@ -58,9 +43,9 @@ class GraphIterator
         return !(*this == other);
     }
 
-    GraphHolder operator++(int)
+    SpecificGraph operator++(int)
     {
-        const auto ret = GraphHolder(SpecificGraph(value_));
+        const auto ret = SpecificGraph(value_);
         ++*this;
         return ret;
     }
@@ -71,6 +56,13 @@ class GraphIterator
         return *this;
     }
 };
+
+template<int V>
+using UGraphIterator = GraphIterator<UGraph<V>>;
+
+template<int V>
+using DiGraphIterator = GraphIterator<DiGraph<V>>;
+
 
 template <class GraphIterator>
 class GraphsRange
@@ -84,23 +76,16 @@ class GraphsRange
     {
     }
 
-    GraphIterator begin()
+    GraphIterator begin() const
     {
         return GraphIterator(start_);
     }
 
-    GraphIterator end()
+    GraphIterator end() const
     {
         return GraphIterator(end_);
     }
 };
-
-
-template <int V>
-typename GraphIterator<UGraph<V>> UGraphIterator;
-
-template <int V>
-typename GraphIterator<DiGraph<V>> DiGraphIterator;
 
 } // namespace graphs
 }
