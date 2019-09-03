@@ -11,14 +11,8 @@ namespace npim
 {
 class MaxIndependentSet
 {
-    private:
-    const std::shared_ptr<IsomorphismService> isomorph_service;
-
     public:
-    MaxIndependentSet(std::shared_ptr<IsomorphismService> isomorph_service)
-      : isomorph_service(std::move(isomorph_service))
-    {
-    }
+    MaxIndependentSet() = default;
 
     template <class GT>
     void solve()
@@ -31,7 +25,7 @@ class MaxIndependentSet
         auto iso_set = std::unordered_set<uint64_t>();
         for (uint64_t instance = 0; instance < number_of_graphs; instance++)
         {
-            auto g = isomorph_service->base_form(GT(instance));
+            auto g = base_form(GT(instance));
             if (iso_set.find(g.edge_bits()) != iso_set.end())
             {
                 continue;

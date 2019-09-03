@@ -11,15 +11,14 @@ namespace npim
 
 void run()
 {
-    for (auto g : graphs::GraphsRange<graphs::UGraphIterator<4>>(0, 5))
+    for (auto g : graphs::GraphsRange<graphs::UGraphIterator<3>>(0, 20))
     {
         std::cout << g << std::endl;
 	}
 
-    //auto iso_service = std::make_shared<IsomorphismService>();
-    //auto solver = MaxIndependentSet(iso_service);
-    //constexpr int v = 5;
-    //solver.solve<graphs::UGraph<v>>();
+    auto solver = MaxIndependentSet();
+    constexpr int v = 5;
+    solver.solve<graphs::UGraph<v>>();
 }
 
 } // namespace npim

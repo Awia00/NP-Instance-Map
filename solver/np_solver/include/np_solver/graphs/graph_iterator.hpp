@@ -1,66 +1,68 @@
 #pragma once
-#include "graph_base.hpp"
-#include "u_graph.hpp"
-#include "di_graph.hpp"
 #include <iterator>
+#include <np_solver/graphs/di_graph.hpp>
+#include <np_solver/graphs/graph_base.hpp>
+#include <np_solver/graphs/u_graph.hpp>
+#include <np_solver/isomorphism.hpp>
 
 namespace npim
 {
-
 namespace graphs
 {
 
 template <class SpecificGraph>
 class GraphIterator
 {
-    private:
-    int value_;
+    protected:
+    int _value;
 
     public:
     // Previously provided by std::iterator - see update below
-    typedef Graph<SpecificGraph> value_type;
+    typedef Graph<SpecificGraph> _valuetype;
     typedef std::ptrdiff_t difference_type;
     typedef Graph<SpecificGraph>* pointer;
     typedef Graph<SpecificGraph>& reference;
     typedef std::input_iterator_tag iterator_category;
 
-    explicit GraphIterator(int value) : value_(value)
+    explicit GraphIterator(int value) : _value(value)
     {
     }
 
     SpecificGraph operator*() const
     {
-        return SpecificGraph(value_);
+        return SpecificGraph(_value);
     }
 
-    bool operator==(const GraphIterator& other) const
+    bool operator==(const GraphIterator<SpecificGraph>& other) const
     {
-        return value_ == other.value_;
+        return _value == other._value;
     }
 
-    bool operator!=(const GraphIterator& other) const
+    bool operator!=(const GraphIterator<SpecificGraph>& other) const
     {
         return !(*this == other);
     }
 
-    SpecificGraph operator++(int)
+	SpecificGraph operator++(int)
     {
         const auto ret = SpecificGraph(value_);
         ++*this;
         return ret;
     }
 
+
     GraphIterator& operator++()
     {
-        ++value_;
+        ++_value;
         return *this;
     }
 };
 
-template<int V>
+
+template <int V>
 using UGraphIterator = GraphIterator<UGraph<V>>;
 
-template<int V>
+template <int V>
 using DiGraphIterator = GraphIterator<DiGraph<V>>;
 
 
@@ -88,4 +90,4 @@ class GraphsRange
 };
 
 } // namespace graphs
-}
+} // namespace npim
