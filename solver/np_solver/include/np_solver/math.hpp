@@ -10,3 +10,12 @@ constexpr uint64_t factorial()
     }
     return result;
 }
+
+template <int n, int k>
+constexpr uint64_t binomial_coefficient()
+{
+    auto fact_n = factorial<n>();
+    auto fact_k = factorial<k>();
+    auto fact_n_minus_k = factorial<n - k>();
+    return fact_n / (fact_k * fact_n_minus_k);
+}
