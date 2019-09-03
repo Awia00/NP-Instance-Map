@@ -3,7 +3,7 @@
 #include <np_solver/filters/instance_filter.hpp>
 #include <np_solver/solvers/instance_solver.hpp>
 #include <np_solver/graphs/graph_base.hpp>
-#include <unordered_map>
+#include <map>
 
 namespace npim
 {
@@ -24,7 +24,7 @@ class PermutationRunner
     {
     }
 
-	bool filter_check(const graphs::Graph<SpecificGraph>& g)
+	bool filter_check(const graphs::Graph<SpecificGraph>& g) const
     {
         auto should_solve = true;
         for (auto filter : filters)
@@ -34,13 +34,13 @@ class PermutationRunner
         return should_solve;
 	}
 
-    void solve()
+    void solve() const
     {
         constexpr uint64_t number_of_graphs = SpecificGraph::number_of_graphs();
         constexpr uint64_t E = SpecificGraph::max_edges();
         std::cout << "Processing #" << number_of_graphs << " graphs" << std::endl;
 		
-		auto stats = std::unordered_map<uint64_t, std::vector<std::unique_ptr<InstanceSolution>>>();
+		auto stats = std::map<uint64_t, std::vector<std::unique_ptr<InstanceSolution>>>();
         for (uint64_t instance = 0; instance < number_of_graphs; instance++)
         {
             auto g = SpecificGraph(instance);
