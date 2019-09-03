@@ -11,6 +11,17 @@ constexpr uint64_t factorial()
     return result;
 }
 
+template <int value, int k>
+constexpr uint64_t falling_factorial()
+{
+    uint64_t result = value;
+    for (auto i = value - 1; i > k; i--)
+    {
+        result *= i;
+    }
+    return result;
+}
+
 template <int n, int k>
 constexpr uint64_t binomial_coefficient()
 {

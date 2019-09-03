@@ -39,6 +39,43 @@ TEST_SUITE("factorial")
     }
 }
 
+TEST_SUITE("falling factorial")
+{
+    // ====== TEST Helpers =====
+    TEST_CASE("0")
+    {
+        CHECK(1 == falling_factorial<0, 0>());
+        CHECK(1 == falling_factorial<0, 1>());
+        CHECK(1 == falling_factorial<0, 2>());
+    }
+
+    TEST_CASE("n when k>=n")
+    {
+        CHECK(10 == falling_factorial<10, 10>());
+        CHECK(10 == falling_factorial<10, 11>());
+        CHECK(10 == falling_factorial<10, 12>());
+        CHECK(10 == falling_factorial<10, 100>());
+    }
+
+    TEST_CASE("same as factorial for k=0")
+    {
+        for (auto i = -4; i < 5; i++)
+        {
+            CHECK(factorial<i>() == falling_factorial<i, 0>());
+        }
+    }
+
+    TEST_CASE("5, x")
+    {
+        CHECK(5 == falling_factorial<5, 5>());
+        CHECK(5 == falling_factorial<5, 4>());
+        CHECK(20 == falling_factorial<5, 3>());
+        CHECK(60 == falling_factorial<5, 2>());
+        CHECK(120 == falling_factorial<5, 1>());
+        CHECK(120 == falling_factorial<5, 0>());
+    }
+}
+
 TEST_SUITE("binomial coefficients")
 {
     // ====== TEST Helpers =====
