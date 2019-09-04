@@ -6,7 +6,7 @@ namespace npim
 namespace graphs
 {
 template <int V>
-struct DiGraph : Graph<DiGraph<V>>
+struct DiGraph : public Graph<DiGraph<V>>
 {
     constexpr const static int vertices()
     {

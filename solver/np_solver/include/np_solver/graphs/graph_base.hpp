@@ -85,7 +85,7 @@ struct Graph
 template <class T>
 std::ostream& operator<<(std::ostream& os, const Graph<T>& obj)
 {
-    auto v = obj.vertices();
+    constexpr auto v = obj.vertices();
     os << "G(V=" << v << ", E={" << std::endl;
     for (auto i = 0; i < v; i++)
     {

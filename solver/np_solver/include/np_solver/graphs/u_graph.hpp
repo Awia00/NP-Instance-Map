@@ -6,7 +6,7 @@ namespace npim
 namespace graphs
 {
 template <int V>
-struct UGraph : Graph<UGraph<V>>
+struct UGraph : public Graph<UGraph<V>>
 {
     constexpr const static int vertices()
     {
@@ -17,7 +17,7 @@ struct UGraph : Graph<UGraph<V>>
         return ((V * (V - 1)) / 2);
     }
 
-    private:
+    protected:
     std::bitset<max_edges()> edges;
 
     public:
@@ -37,7 +37,6 @@ struct UGraph : Graph<UGraph<V>>
     {
         return UGraph<V>(edge_bits());
     }
-
 
     int index(int v1, int v2) const
     {
@@ -74,5 +73,6 @@ struct UGraph : Graph<UGraph<V>>
         return edges.to_ullong();
     }
 };
+
 } // namespace graphs
 } // namespace npim

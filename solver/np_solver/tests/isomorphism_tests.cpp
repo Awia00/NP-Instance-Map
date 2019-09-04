@@ -13,16 +13,15 @@ TEST_SUITE("swap")
     template <typename GT>
     void check_when_swap_has_no_change(const graphs::Graph<GT>& g_original, graphs::Graph<GT>& g_modify)
     {
-        auto service = IsomorphismService();
         CHECK(GT::vertices() == 5);
 
-        service.swap(g_modify, 0, 1);
+        swap(g_modify, 0, 1);
         CHECK(g_original.edge_bits() == g_modify.edge_bits());
 
-        service.swap(g_modify, 2, 4);
+        swap(g_modify, 2, 4);
         CHECK(g_original.edge_bits() == g_modify.edge_bits());
 
-        service.swap(g_modify, 2, 1);
+        swap(g_modify, 2, 1);
         CHECK(g_original.edge_bits() == g_modify.edge_bits());
     }
 
@@ -31,16 +30,14 @@ TEST_SUITE("swap")
     {
         CHECK(GT::vertices() == 5);
 
-        auto service = IsomorphismService();
-
         CHECK(g_original.edge_bits() == g_modify.edge_bits());
 
-        service.swap(g_modify, 2, 4);
-        service.swap(g_modify, 4, 2);
+        swap(g_modify, 2, 4);
+        swap(g_modify, 4, 2);
         CHECK(g_original.edge_bits() == g_modify.edge_bits());
 
-        service.swap(g_modify, 2, 1);
-        service.swap(g_modify, 1, 2);
+        swap(g_modify, 2, 1);
+        swap(g_modify, 1, 2);
         CHECK(g_original.edge_bits() == g_modify.edge_bits());
     }
 
@@ -49,24 +46,22 @@ TEST_SUITE("swap")
     {
         CHECK(GT::vertices() == 5);
 
-        auto service = IsomorphismService();
-
-        service.swap(g_modify, 0, 1);
-        service.swap(g_modify, 1, 2);
-        service.swap(g_modify, 2, 0);
-        service.swap(g_modify, 1, 2);
+        swap(g_modify, 0, 1);
+        swap(g_modify, 1, 2);
+        swap(g_modify, 2, 0);
+        swap(g_modify, 1, 2);
         CHECK(g_original.edge_bits() == g_modify.edge_bits());
 
-        service.swap(g_modify, 2, 4);
-        service.swap(g_modify, 4, 3);
-        service.swap(g_modify, 3, 2);
-        service.swap(g_modify, 4, 3);
+        swap(g_modify, 2, 4);
+        swap(g_modify, 4, 3);
+        swap(g_modify, 3, 2);
+        swap(g_modify, 4, 3);
         CHECK(g_original.edge_bits() == g_modify.edge_bits());
 
-        service.swap(g_modify, 2, 1);
-        service.swap(g_modify, 1, 0);
-        service.swap(g_modify, 0, 2);
-        service.swap(g_modify, 1, 0);
+        swap(g_modify, 2, 1);
+        swap(g_modify, 1, 0);
+        swap(g_modify, 0, 2);
+        swap(g_modify, 1, 0);
         CHECK(g_original.edge_bits() == g_modify.edge_bits());
     }
 
@@ -105,9 +100,8 @@ TEST_SUITE("swap")
     {
         auto g_original = graphs::DiGraph<5>(graphs::DiGraph<5>::number_of_graphs() / 2);
         auto g_modify = g_original.clone();
-        auto service = IsomorphismService();
 
-        service.swap(g_modify, 2, 4);
+        swap(g_modify, 2, 4);
         CHECK(g_original.edge_bits() != g_modify.edge_bits());
     }
 
@@ -115,9 +109,8 @@ TEST_SUITE("swap")
     {
         auto g_original = graphs::UGraph<5>(graphs::UGraph<5>::number_of_graphs() / 2);
         auto g_modify = g_original.clone();
-        auto service = IsomorphismService();
 
-        service.swap(g_modify, 2, 4);
+        swap(g_modify, 2, 4);
         CHECK(g_original.edge_bits() != g_modify.edge_bits());
     }
 
@@ -155,70 +148,63 @@ TEST_SUITE("base_form")
     TEST_CASE("Zero is base form")
     {
         auto g_original = graphs::UGraph<5>(0);
-        auto service = IsomorphismService();
-        auto result = service.base_form(g_original);
+        auto result = base_form(g_original);
         CHECK(g_original.edge_bits() == result.edge_bits());
     }
 
     TEST_CASE("All one is base form")
     {
         auto g_original = graphs::UGraph<5>(graphs::UGraph<5>::number_of_graphs() - 1);
-        auto service = IsomorphismService();
-        auto result = service.base_form(g_original);
+        auto result = base_form(g_original);
         CHECK(g_original.edge_bits() == result.edge_bits());
     }
 
     TEST_CASE("Last one to first one")
     {
         auto g_original = graphs::UGraph<5>(graphs::UGraph<5>::number_of_graphs() / 2);
-        auto service = IsomorphismService();
-        auto result = service.base_form(g_original);
+        auto result = base_form(g_original);
         CHECK(result.edge_bits() == 1);
     }
 
     TEST_CASE("Base always lower or equal 1")
     {
-        auto service = IsomorphismService();
         for (uint64_t i = 0; i < graphs::UGraph<5>::number_of_graphs(); i++)
         {
             auto g_original = graphs::UGraph<5>(i);
-            auto result = service.base_form(g_original);
+            auto result = base_form(g_original);
             CHECK(result.edge_bits() <= i);
         }
     }
 
     TEST_CASE("swap gives same base 1 [Difficult]")
     {
-        auto service = IsomorphismService();
         auto g_original = graphs::UGraph<5>(938);
 
-        auto result_before_swap = service.base_form(g_original);
-        service.swap(g_original, 0, 2);
-        auto result = service.base_form(g_original);
+        auto result_before_swap = base_form(g_original);
+        swap(g_original, 0, 2);
+        auto result = base_form(g_original);
         CHECK(result.edge_bits() == result_before_swap.edge_bits());
     }
 
     TEST_CASE("swap gives same base 2 [Difficult]")
     {
-        auto service = IsomorphismService();
         auto g_original = graphs::UGraph<5>(947);
 
-        auto result_before_swap = service.base_form(g_original);
-        service.swap(g_original, 0, 2);
-        auto result = service.base_form(g_original);
+        auto result_before_swap = base_form(g_original);
+        swap(g_original, 0, 2);
+        auto result = base_form(g_original);
         CHECK(result.edge_bits() == result_before_swap.edge_bits());
     }
 
     TEST_CASE("swap gives same base [ALL]")
     {
-        auto service = IsomorphismService();
         for (uint64_t i = 0; i < graphs::UGraph<5>::number_of_graphs(); i++)
         {
             auto g_original = graphs::UGraph<5>(i);
 
-            auto result_before_swap = service.base_form(g_original);
-            service.swap(g_original, 0, 2);
-            auto result = service.base_form(g_original);
+            auto result_before_swap = base_form(g_original);
+            swap(g_original, 0, 2);
+            auto result = base_form(g_original);
 
             CHECK(result.edge_bits() == result_before_swap.edge_bits());
         }
