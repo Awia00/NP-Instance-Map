@@ -45,22 +45,30 @@ class PermutationRunner
         }
     }
 
-	void solve() const
+	void solve_all() const
 	{
-		constexpr uint64_t number_of_graphs = SpecificGraph::number_of_graphs();
+        constexpr uint64_t V = SpecificGraph::vertices();
+        constexpr uint64_t number_of_graphs = SpecificGraph::number_of_graphs();
 		std::cout << "Processing #" << number_of_graphs << " graphs" << std::endl;
 
 		auto stats = std::map<uint64_t, std::vector<std::unique_ptr<InstanceSolution>>>();
         auto all_graphs = std::set<uint64_t>();
-		for (uint64_t instance = 0; instance < number_of_graphs; instance++)
-		{
-            auto g = SpecificGraph(instance);
-            if (filter_check(g))
-            {
-                std::cout << g.edges << std::endl;
-                solve_graph(g, stats);
-			}
+        uint64_t instance = 0;
+        for (auto i = 1; i <= V; i++)
+        {
+            std::cout << "V: " << i << std::endl;
+			do {
+                auto g = SpecificGraph(instance);
+                if (filter_check(g))
+                {
+                    all_graphs.insert(instance);
+                    std::cout << g.edges << std::endl;
+                    solve_graph(g, stats);
+                }
+                instance++;
+            } while (instance != (1 << (i*(i-1)/2)));
 		}
+        std::cout << std::endl;
 		print_stats(stats);
 	}
 
@@ -70,6 +78,7 @@ class PermutationRunner
 	void print_stats(const std::map<uint64_t, std::vector<std::unique_ptr<InstanceSolution>>>& stats) const
     {
         constexpr uint64_t E = SpecificGraph::max_edges();
+        std::cout << "Solutions:" << std::endl;
         for (const auto& pair : stats)
         {
             auto graph = pair.first;

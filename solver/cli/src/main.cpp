@@ -15,7 +15,7 @@ void run()
     auto max_ind_set_solver = std::make_shared<solvers::MaxIndependentSet<graphs::UGraph<v>>>();
     auto iso_filter = std::make_shared<filters::IsomorphFilter<graphs::UGraph<v>>>();
     auto perm_runner = PermutationRunner<graphs::UGraph<v>>({ iso_filter }, { max_ind_set_solver });
-    perm_runner.solve();
+    perm_runner.solve_all();
 }
 } // namespace npim
 
