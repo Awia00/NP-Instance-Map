@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <np_solver/graphs/graph_base.hpp>
 #include <np_solver/graphs/u_graph.hpp>
 #include <np_solver/math.hpp>
@@ -38,7 +38,7 @@ void swap(graphs::Graph<GT>& g, int v1, int v2)
     swap(from, g, v1, v2);
 }
 
-template<int V>
+template <int V>
 constexpr std::vector<std::vector<std::tuple<int, int>>> all_swap_combinations()
 {
     auto swaps_set = std::vector<std::vector<std::tuple<int, int>>>();
