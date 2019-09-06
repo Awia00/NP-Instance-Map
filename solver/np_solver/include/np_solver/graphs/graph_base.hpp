@@ -31,7 +31,7 @@ struct Graph
     {
         return static_cast<const SpecificGraph*>(this)->clone();
     }
-
+	
     void set_edge(int v1, int v2, bool val = true)
     {
         static_cast<SpecificGraph*>(this)->set_edge(v1, v2, val);

@@ -38,17 +38,17 @@ void swap(graphs::Graph<GT>& g, int v1, int v2)
     swap(from, g, v1, v2);
 }
 
-template <typename GT>
-GT base_form(const graphs::Graph<GT>& base)
+template<int V>
+constexpr std::vector<std::vector<std::tuple<int, int>>> all_swap_combinations()
 {
     auto swaps_set = std::vector<std::vector<std::tuple<int, int>>>();
-    swaps_set.reserve(factorial<base.vertices()>());
+    swaps_set.reserve(factorial<V>());
     swaps_set.push_back({});
 
-    for (auto i = 0; i < GT::vertices(); i++)
+    for (auto i = 0; i < V; i++)
     {
         auto size = (int)swaps_set.size();
-        for (auto j = i + 1; j < GT::vertices(); j++)
+        for (auto j = i + 1; j < V; j++)
         {
             for (auto k = 0; k < size; k++)
             {
@@ -58,6 +58,13 @@ GT base_form(const graphs::Graph<GT>& base)
             }
         }
     }
+    return swaps_set;
+}
+
+template <typename GT>
+GT base_form(const graphs::Graph<GT>& base)
+{
+    auto swaps_set = all_swap_combinations<base.vertices()>();
     auto result = base.clone();
 
     for (const auto& swaps : swaps_set)

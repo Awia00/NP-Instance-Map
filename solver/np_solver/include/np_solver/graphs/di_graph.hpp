@@ -17,10 +17,8 @@ struct DiGraph : public Graph<DiGraph<V>>
         return V * V;
     }
 
-    private:
     std::bitset<max_edges()> edges;
 
-    public:
     constexpr static uint64_t number_of_graphs()
     {
         return 1ULL << (max_edges());

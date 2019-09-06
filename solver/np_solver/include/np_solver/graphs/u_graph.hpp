@@ -17,10 +17,8 @@ struct UGraph : public Graph<UGraph<V>>
         return ((V * (V - 1)) / 2);
     }
 
-    protected:
     std::bitset<max_edges()> edges;
 
-    public:
     constexpr static uint64_t number_of_graphs()
     {
         return 1ULL << max_edges();
