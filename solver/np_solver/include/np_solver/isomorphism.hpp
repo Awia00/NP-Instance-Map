@@ -61,12 +61,6 @@ int perm_matrix(int col, int inst, std::array<int, V - 1> current_perm, std::vec
 template <int V>
 constexpr std::vector<std::array<int, V - 1>> all_swap_combinations()
 {
-    // new Swap idea:
-    // imagine a (v-1)*(v-1) matrix. A 1 in a position (i,j) means that vertex i,j will be swapped.
-    // there must be atmost 1, in each row and colunm since we will not allow a i to be swapped
-    // multiple times. one could therefore also just have a set of atmost v-1 pair of numbers
-    // [0...v[ maybe (v choose 2)?
-
     auto perm_set = std::vector<std::array<int, V - 1>>();
     perm_set.reserve(factorial<V>());
     perm_matrix<V>(0, 0, std::array<int, V - 1>(), perm_set);
