@@ -64,18 +64,19 @@ class PermutationRunner
 
         auto stats = std::map<uint64_t, std::vector<std::unique_ptr<InstanceSolution>>>();
         auto all_graphs = std::vector<uint64_t>();
+        all_graphs.reserve(factorial<V>());
         handle_graph(SpecificGraph(0), stats, all_graphs);
 
         for (uint64_t i = 2; i <= V; i++)
         {
-            // std::cout << "V: " << i << std::endl;
+            std::cout << "V: " << i << std::endl;
 
             auto prev_size = all_graphs.size();
             for (auto idx = 0; idx < prev_size; idx++)
             {
                 const auto prev_g = all_graphs[idx];
                 const auto start = ((i - 1) * (i - 2) / 2);
-                for (uint64_t row_perm = 1; row_perm < (1 << (i - 1)); row_perm++)
+                for (uint64_t row_perm = 1; row_perm < (1ULL << (i - 1)); row_perm++)
                 {
                     auto instance = (row_perm << start) | prev_g;
                     auto g = base_form(SpecificGraph(instance));

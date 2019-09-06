@@ -47,7 +47,7 @@ constexpr std::vector<std::vector<std::tuple<int, int>>> all_swap_combinations()
 
     for (auto i = 0; i < V; i++)
     {
-        auto size = (int)swaps_set.size();
+        const auto size = (int)swaps_set.size();
         for (auto j = i + 1; j < V; j++)
         {
             for (auto k = 0; k < size; k++)

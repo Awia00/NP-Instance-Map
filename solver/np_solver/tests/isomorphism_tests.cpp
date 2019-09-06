@@ -1,4 +1,4 @@
-#include <doctest/doctest.h>
+﻿#include <doctest/doctest.h>
 #include <np_solver/graphs/di_graph.hpp>
 #include <np_solver/graphs/u_graph.hpp>
 #include <np_solver/isomorphism.hpp>
@@ -208,6 +208,61 @@ TEST_SUITE("base_form")
 
             CHECK(result.edge_bits() == result_before_swap.edge_bits());
         }
+    }
+
+    TEST_CASE("First V=5 fundemental graphs")
+    {
+        CHECK(graphs::UGraph<5>(0).edge_bits() == base_form(graphs::UGraph<5>(0)).edge_bits());
+        CHECK(graphs::UGraph<5>(1).edge_bits() == base_form(graphs::UGraph<5>(1)).edge_bits());
+        CHECK(graphs::UGraph<5>(3).edge_bits() == base_form(graphs::UGraph<5>(3)).edge_bits());
+        CHECK(graphs::UGraph<5>(7).edge_bits() == base_form(graphs::UGraph<5>(7)).edge_bits());
+        CHECK(graphs::UGraph<5>(11).edge_bits() == base_form(graphs::UGraph<5>(11)).edge_bits());
+        CHECK(graphs::UGraph<5>(12).edge_bits() == base_form(graphs::UGraph<5>(12)).edge_bits());
+        CHECK(graphs::UGraph<5>(13).edge_bits() == base_form(graphs::UGraph<5>(13)).edge_bits());
+        CHECK(graphs::UGraph<5>(15).edge_bits() == base_form(graphs::UGraph<5>(15)).edge_bits());
+        CHECK(graphs::UGraph<5>(30).edge_bits() == base_form(graphs::UGraph<5>(30)).edge_bits());
+        CHECK(graphs::UGraph<5>(31).edge_bits() == base_form(graphs::UGraph<5>(31)).edge_bits());
+        CHECK(graphs::UGraph<5>(63).edge_bits() == base_form(graphs::UGraph<5>(63)).edge_bits());
+        CHECK(graphs::UGraph<5>(75).edge_bits() == base_form(graphs::UGraph<5>(75)).edge_bits());
+        CHECK(graphs::UGraph<5>(76).edge_bits() == base_form(graphs::UGraph<5>(76)).edge_bits());
+        CHECK(graphs::UGraph<5>(77).edge_bits() == base_form(graphs::UGraph<5>(77)).edge_bits());
+        CHECK(graphs::UGraph<5>(79).edge_bits() == base_form(graphs::UGraph<5>(79)).edge_bits());
+        CHECK(graphs::UGraph<5>(86).edge_bits() == base_form(graphs::UGraph<5>(86)).edge_bits());
+        CHECK(graphs::UGraph<5>(87).edge_bits() == base_form(graphs::UGraph<5>(87)).edge_bits());
+        CHECK(graphs::UGraph<5>(94).edge_bits() == base_form(graphs::UGraph<5>(94)).edge_bits());
+        CHECK(graphs::UGraph<5>(95).edge_bits() == base_form(graphs::UGraph<5>(95)).edge_bits());
+        CHECK(graphs::UGraph<5>(116).edge_bits() == base_form(graphs::UGraph<5>(116)).edge_bits());
+        CHECK(graphs::UGraph<5>(117).edge_bits() == base_form(graphs::UGraph<5>(117)).edge_bits());
+        CHECK(graphs::UGraph<5>(119).edge_bits() == base_form(graphs::UGraph<5>(119)).edge_bits());
+        CHECK(graphs::UGraph<5>(127).edge_bits() == base_form(graphs::UGraph<5>(127)).edge_bits());
+        CHECK(graphs::UGraph<5>(222).edge_bits() == base_form(graphs::UGraph<5>(222)).edge_bits());
+        CHECK(graphs::UGraph<5>(223).edge_bits() == base_form(graphs::UGraph<5>(223)).edge_bits());
+        CHECK(graphs::UGraph<5>(235).edge_bits() == base_form(graphs::UGraph<5>(235)).edge_bits());
+        CHECK(graphs::UGraph<5>(236).edge_bits() == base_form(graphs::UGraph<5>(236)).edge_bits());
+        CHECK(graphs::UGraph<5>(237).edge_bits() == base_form(graphs::UGraph<5>(237)).edge_bits());
+        CHECK(graphs::UGraph<5>(239).edge_bits() == base_form(graphs::UGraph<5>(239)).edge_bits());
+        CHECK(graphs::UGraph<5>(254).edge_bits() == base_form(graphs::UGraph<5>(254)).edge_bits());
+        CHECK(graphs::UGraph<5>(255).edge_bits() == base_form(graphs::UGraph<5>(255)).edge_bits());
+        CHECK(graphs::UGraph<5>(507).edge_bits() == base_form(graphs::UGraph<5>(507)).edge_bits());
+        CHECK(graphs::UGraph<5>(511).edge_bits() == base_form(graphs::UGraph<5>(511)).edge_bits());
+        CHECK(graphs::UGraph<5>(1023).edge_bits() == base_form(graphs::UGraph<5>(1023)).edge_bits());
+    }
+
+    TEST_CASE("Some V=5 non-fundemental graphs")
+    {
+        CHECK(graphs::UGraph<5>(2).edge_bits() != base_form(graphs::UGraph<5>(2)).edge_bits());
+        CHECK(graphs::UGraph<5>(4).edge_bits() != base_form(graphs::UGraph<5>(4)).edge_bits());
+        CHECK(graphs::UGraph<5>(5).edge_bits() != base_form(graphs::UGraph<5>(5)).edge_bits());
+        CHECK(graphs::UGraph<5>(6).edge_bits() != base_form(graphs::UGraph<5>(6)).edge_bits());
+        CHECK(graphs::UGraph<5>(8).edge_bits() != base_form(graphs::UGraph<5>(8)).edge_bits());
+        CHECK(graphs::UGraph<5>(9).edge_bits() != base_form(graphs::UGraph<5>(9)).edge_bits());
+        CHECK(graphs::UGraph<5>(10).edge_bits() != base_form(graphs::UGraph<5>(10)).edge_bits());
+        CHECK(graphs::UGraph<5>(14).edge_bits() != base_form(graphs::UGraph<5>(14)).edge_bits());
+        CHECK(graphs::UGraph<5>(16).edge_bits() != base_form(graphs::UGraph<5>(16)).edge_bits());
+        CHECK(graphs::UGraph<5>(64).edge_bits() != base_form(graphs::UGraph<5>(64)).edge_bits());
+        CHECK(graphs::UGraph<5>(85).edge_bits() != base_form(graphs::UGraph<5>(85)).edge_bits());
+        CHECK(graphs::UGraph<5>(118).edge_bits() != base_form(graphs::UGraph<5>(118)).edge_bits());
+        CHECK(graphs::UGraph<5>(125).edge_bits() != base_form(graphs::UGraph<5>(125)).edge_bits());
     }
 }
 } // namespace npim
