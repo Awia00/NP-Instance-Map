@@ -75,5 +75,18 @@ class DuplicateFilter : public InstanceFilter<SpecificGraph>
     }
 };
 
+template <class SpecificGraph>
+class ConnectedGraphFilter : public InstanceFilter<SpecificGraph>
+{
+    private:
+    std::unordered_set<uint64_t> seen_graphs;
+
+    public:
+    bool include_instance(const graphs::Graph<SpecificGraph>& g) override
+    {
+        return g.is_connected();
+    }
+};
+
 } // namespace filters
 } // namespace npim

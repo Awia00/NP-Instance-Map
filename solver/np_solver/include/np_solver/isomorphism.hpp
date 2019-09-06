@@ -39,26 +39,40 @@ void swap(graphs::Graph<GT>& g, int v1, int v2)
 }
 
 template <int V>
-constexpr std::vector<std::vector<std::tuple<int, int>>> all_swap_combinations()
+int perm_matrix(int col, int inst, std::array<int, V - 1> current_perm, std::vector<std::array<int, V - 1>>& perm_set)
 {
-    auto swaps_set = std::vector<std::vector<std::tuple<int, int>>>();
-    swaps_set.reserve(factorial<V>());
-    swaps_set.push_back({});
-
-    for (auto i = 0; i < V; i++)
+    if (col < V)
     {
-        const auto size = (int)swaps_set.size();
-        for (auto j = i + 1; j < V; j++)
+        inst = perm_matrix<V>(col + 1, inst, current_perm, perm_set); // zero recurse
+        for (auto j = col; j < V - 1; j++)
         {
-            for (auto k = 0; k < size; k++)
-            {
-                std::vector<std::tuple<int, int>> with = swaps_set[k];
-                with.push_back(std::make_tuple(i, j));
-                swaps_set.push_back(with);
-            }
+            current_perm[col] = j + 1;
+            inst = perm_matrix<V>(col + 1, inst, current_perm, perm_set); // recurse
         }
     }
-    return swaps_set;
+    else
+    {
+        perm_set.push_back(current_perm);
+        return ++inst;
+    }
+    return inst;
+}
+
+template <int V>
+constexpr std::vector<std::array<int, V - 1>> all_swap_combinations()
+{
+    // new Swap idea:
+    // imagine a (v-1)*(v-1) matrix. A 1 in a position (i,j) means that vertex i,j will be swapped.
+    // there must be atmost 1, in each row and colunm since we will not allow a i to be swapped
+    // multiple times. one could therefore also just have a set of atmost v-1 pair of numbers
+    // [0...v[ maybe (v choose 2)?
+
+    auto perm_set = std::vector<std::array<int, V - 1>>();
+    perm_set.reserve(factorial<V>());
+    perm_matrix<V>(0, 0, std::array<int, V - 1>(), perm_set);
+    // std::cout << "permsize: " << perm_set.size() << std::endl;
+
+    return perm_set;
 }
 
 template <typename GT>
@@ -70,12 +84,12 @@ GT base_form(const graphs::Graph<GT>& base)
     for (const auto& swaps : swaps_set)
     {
         auto swapped = base.clone();
-        for (const auto& swap_pair : swaps)
+        for (auto i = 0; i < base.vertices() - 1; i++)
         {
-            const auto v1 = std::get<0>(swap_pair);
-            const auto v2 = std::get<1>(swap_pair);
-
-            swap(swapped, v1, v2);
+            if (swaps[i] != 0)
+            {
+                swap(swapped, i, swaps[i]);
+            }
         }
         if (swapped.edge_bits() < result.edge_bits())
         {

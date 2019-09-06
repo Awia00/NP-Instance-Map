@@ -1,5 +1,4 @@
-﻿
-#pragma once
+﻿#pragma once
 #include <map>
 #include <np_solver/filters/instance_filter.hpp>
 #include <np_solver/graphs/graph_base.hpp>
@@ -8,8 +7,6 @@
 
 namespace npim
 {
-
-
 template <class SpecificGraph>
 class PermutationRunner
 {
@@ -34,7 +31,7 @@ class PermutationRunner
         return should_solve;
     }
 
-    bool solve_graph(const graphs::Graph<SpecificGraph>& g,
+    void solve_graph(const graphs::Graph<SpecificGraph>& g,
                      std::map<uint64_t, std::vector<std::unique_ptr<InstanceSolution>>>& stats) const
     {
         stats[g.edge_bits()] = std::vector<std::unique_ptr<InstanceSolution>>();
@@ -65,8 +62,9 @@ class PermutationRunner
         auto stats = std::map<uint64_t, std::vector<std::unique_ptr<InstanceSolution>>>();
         auto all_graphs = std::vector<uint64_t>();
         all_graphs.reserve(factorial<V>());
-        handle_graph(SpecificGraph(0), stats, all_graphs);
 
+        handle_graph(SpecificGraph(0), stats, all_graphs); // add initial graph with 1 vertex, 0 edges.
+        auto counter = 1;
         for (uint64_t i = 2; i <= V; i++)
         {
             std::cout << "V: " << i << std::endl;
@@ -83,11 +81,11 @@ class PermutationRunner
                     handle_graph(g, stats, all_graphs);
                 }
             }
+            std::cout << all_graphs.size() << std::endl;
         }
         std::cout << std::endl;
         print_stats(stats);
     }
-
 
     private:
     void print_stats(const std::map<uint64_t, std::vector<std::unique_ptr<InstanceSolution>>>& stats) const
@@ -105,5 +103,4 @@ class PermutationRunner
         std::cout << stats.size() << std::endl;
     }
 };
-
 } // namespace npim
