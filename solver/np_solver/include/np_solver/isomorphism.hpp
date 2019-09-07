@@ -2,9 +2,9 @@
 #include <np_solver/graphs/graph_base.hpp>
 #include <np_solver/graphs/u_graph.hpp>
 #include <np_solver/math.hpp>
-#include <np_solver/constexpr_helpers.hpp>
 #include <tuple>
 #include <vector>
+
 namespace npim
 {
 template <typename GT>
@@ -39,16 +39,16 @@ void swap(graphs::Graph<GT>& g, int v1, int v2)
 }
 
 template <int V>
-constexpr int perm_matrix(const int col, int inst, const std::array<int, V - 1>& current_perm, std::vector<std::array<int, V - 1>>& perm_set)
+constexpr int perm_matrix(const int col, int inst, const std::array<int, V - 1>& current_perm, std::vector<std::array<int, V - 1>>& perm_set, int active_vertices)
 {
     if (col < V)
     {
-        inst = perm_matrix<V>(col + 1, inst, current_perm, perm_set); // zero recurse
+        inst = perm_matrix<V>(col + 1, inst, current_perm, perm_set, active_vertices); // zero recurse
         auto copy = current_perm;
-        for (auto j = col; j < V - 1; j++)
+        for (auto j = col; j < active_vertices; j++)
         {
             copy[col] = j + 1;
-            inst = perm_matrix<V>(col + 1, inst, copy, perm_set); // recurse
+            inst = perm_matrix<V>(col + 1, inst, copy, perm_set, active_vertices); // recurse
         }
     }
     else
@@ -60,11 +60,11 @@ constexpr int perm_matrix(const int col, int inst, const std::array<int, V - 1>&
 }
 
 template <int V>
-constexpr std::vector<std::array<int, V - 1>> all_swap_combinations()
+constexpr std::vector<std::array<int, V - 1>> all_swap_combinations(int number_of_vertices)
 {
     auto perm_set = std::vector<std::array<int, V - 1>>();
     perm_set.reserve(factorial<V>());
-    perm_matrix<V>(0, 0, std::array<int, V - 1>(), perm_set);
+    perm_matrix<V>(0, 0, std::array<int, V - 1>(), perm_set, number_of_vertices-1);
     // std::cout << "permsize: " << perm_set.size() << std::endl;
 
     return perm_set;
@@ -73,7 +73,7 @@ constexpr std::vector<std::array<int, V - 1>> all_swap_combinations()
 template <typename GT>
 GT base_form(const graphs::Graph<GT>& base, int active_vertices = GT::vertices())
 {
-    auto swaps_set = all_swap_combinations<base.vertices()>();
+    auto swaps_set = all_swap_combinations<GT::vertices()>(active_vertices);
     auto result = base.clone();
 
     for (const auto& swaps : swaps_set)

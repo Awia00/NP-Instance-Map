@@ -77,7 +77,7 @@ class PermutationRunner
                 for (uint64_t row_perm = 1; row_perm < (1ULL << (i - 1)); row_perm++)
                 {
                     auto instance = (row_perm << start) | prev_g;
-                    auto g = base_form(SpecificGraph(instance));
+                    auto g = base_form(SpecificGraph(instance), i);
                     handle_graph(g, stats, all_graphs);
                 }
             }
