@@ -2,9 +2,9 @@
 #include <np_solver/graphs/graph_base.hpp>
 #include <np_solver/graphs/u_graph.hpp>
 #include <np_solver/math.hpp>
+#include <np_solver/constexpr_helpers.hpp>
 #include <tuple>
 #include <vector>
-
 namespace npim
 {
 template <typename GT>
@@ -39,15 +39,16 @@ void swap(graphs::Graph<GT>& g, int v1, int v2)
 }
 
 template <int V>
-int perm_matrix(int col, int inst, std::array<int, V - 1> current_perm, std::vector<std::array<int, V - 1>>& perm_set)
+constexpr int perm_matrix(const int col, int inst, const std::array<int, V - 1>& current_perm, std::vector<std::array<int, V - 1>>& perm_set)
 {
     if (col < V)
     {
         inst = perm_matrix<V>(col + 1, inst, current_perm, perm_set); // zero recurse
+        auto copy = current_perm;
         for (auto j = col; j < V - 1; j++)
         {
-            current_perm[col] = j + 1;
-            inst = perm_matrix<V>(col + 1, inst, current_perm, perm_set); // recurse
+            copy[col] = j + 1;
+            inst = perm_matrix<V>(col + 1, inst, copy, perm_set); // recurse
         }
     }
     else
@@ -70,7 +71,7 @@ constexpr std::vector<std::array<int, V - 1>> all_swap_combinations()
 }
 
 template <typename GT>
-GT base_form(const graphs::Graph<GT>& base)
+GT base_form(const graphs::Graph<GT>& base, int active_vertices = GT::vertices())
 {
     auto swaps_set = all_swap_combinations<base.vertices()>();
     auto result = base.clone();
