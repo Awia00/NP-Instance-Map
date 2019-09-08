@@ -9,19 +9,50 @@
 namespace npim
 {
 template <class SpecificGraph>
-class PermutationRunner
+class IsomorphicGraphPermutationRunner
 {
     protected:
     std::vector<std::shared_ptr<filters::InstanceFilter<SpecificGraph>>> filters;
     std::vector<std::shared_ptr<solvers::InstanceSolver<SpecificGraph>>> solvers;
 
     public:
-    PermutationRunner(const std::vector<std::shared_ptr<filters::InstanceFilter<SpecificGraph>>>& filters,
+    IsomorphicGraphPermutationRunner(
+        const std::vector<std::shared_ptr<filters::InstanceFilter<SpecificGraph>>>& filters,
                       const std::vector<std::shared_ptr<solvers::InstanceSolver<SpecificGraph>>>& solvers)
       : filters(filters), solvers(solvers)
     {
     }
 
+	/**
+	* Runs the solvers on each fundemental graph up to size V determined by template SpecificGraph.
+	**/
+	void solve_all() const
+    {
+        constexpr uint64_t V = SpecificGraph::vertices();
+        constexpr uint64_t number_of_graphs = SpecificGraph::number_of_graphs();
+        std::cout << "Processing #" << number_of_graphs << " graphs" << std::endl;
+
+        auto stats = std::map<uint64_t, std::vector<std::unique_ptr<InstanceSolution>>>();
+        auto all_graphs = std::vector<uint64_t>();
+        all_graphs.reserve(factorial<V>()); // a bit too much, but this was the closest asymptotics I could find.
+
+        auto all_graphs_mutex = std::mutex();
+        auto stats_mutex = std::mutex();
+
+        filter_and_solve_graph(SpecificGraph(0), stats, all_graphs, all_graphs_mutex, stats_mutex); // add initial graph with 1 vertex, 0 edges.
+        for (uint64_t specific_v = 2; specific_v <= V; specific_v++)
+        {
+            std::cout << "V: " << specific_v << std::endl;
+            solve_specific_v(specific_v, stats, all_graphs, all_graphs_mutex, stats_mutex);
+            std::cout << all_graphs.size() << std::endl;
+        }
+        std::cout << std::endl;
+        print_stats(stats);
+    }
+
+	/**
+	* Runs the filters on the graph, returns true if all the filters return true, false otherwise.
+	**/
     bool filter_check(const graphs::Graph<SpecificGraph>& g) const
     {
         auto should_solve = true;
@@ -32,6 +63,9 @@ class PermutationRunner
         return should_solve;
     }
 
+	/**
+	* Runs the solvers on the specific graph, adds the results to stats.
+	**/
     void solve_graph(const graphs::Graph<SpecificGraph>& g,
                      std::map<uint64_t, std::vector<std::unique_ptr<InstanceSolution>>>& stats,
                      std::mutex& stats_mutex) const
@@ -54,7 +88,39 @@ class PermutationRunner
         }
     }
 
-    void handle_graph(const graphs::Graph<SpecificGraph>& g,
+	/**
+	* For a specific v < SpecificGraph::vertices(), find all fundemental graphs based on previously v-1 found graphs.
+	* It does so by running every permutation of adding a new node.
+	**/
+	void solve_specific_v(uint64_t specific_v,
+                          std::map<uint64_t, std::vector<std::unique_ptr<InstanceSolution>>>& stats,
+                          std::vector<uint64_t>& all_graphs,
+                          std::mutex& all_graphs_mutex,
+                          std::mutex& stats_mutex) const
+    {
+        const auto prev_size = all_graphs.size();
+        const auto start = ((specific_v - 1) * (specific_v - 2) / 2);
+        const auto number_of_perm = (1ULL << (specific_v - 1));
+
+#pragma omp parallel for shared(all_graphs_mutex, stats_mutex, all_graphs, stats)
+        for (auto idx = 0; idx < prev_size; idx++)
+        {
+            const auto prev_g = all_graphs[idx];
+            for (uint64_t row_perm = 1; row_perm < number_of_perm; row_perm++)
+            {
+                auto instance = (row_perm << start) | prev_g;
+                auto g = base_form(SpecificGraph(instance), specific_v);
+                filter_and_solve_graph(g, stats, all_graphs, all_graphs_mutex, stats_mutex);
+            }
+        }
+    }
+
+
+	private:
+	/**
+	* Checks if the graph should be solved, and solves it if it should.
+	**/
+    void filter_and_solve_graph(const graphs::Graph<SpecificGraph>& g,
                       std::map<uint64_t, std::vector<std::unique_ptr<InstanceSolution>>>& stats,
                       std::vector<uint64_t>& all_graphs,
                       std::mutex& all_graphs_mutex,
@@ -71,45 +137,6 @@ class PermutationRunner
         }
     }
 
-    void solve_all() const
-    {
-        constexpr uint64_t V = SpecificGraph::vertices();
-        constexpr uint64_t number_of_graphs = SpecificGraph::number_of_graphs();
-        std::cout << "Processing #" << number_of_graphs << " graphs" << std::endl;
-
-        auto stats = std::map<uint64_t, std::vector<std::unique_ptr<InstanceSolution>>>();
-        auto all_graphs = std::vector<uint64_t>();
-        all_graphs.reserve(factorial<V>());
-
-        auto all_graphs_mutex = std::mutex();
-        auto stats_mutex = std::mutex();
-
-
-        handle_graph(SpecificGraph(0), stats, all_graphs, all_graphs_mutex, stats_mutex); // add initial graph with 1 vertex, 0 edges.
-        auto counter = 1;
-        for (uint64_t i = 2; i <= V; i++)
-        {
-            std::cout << "V: " << i << std::endl;
-            auto prev_size = all_graphs.size();
-
-#pragma omp parallel for shared(all_graphs_mutex, stats_mutex, all_graphs, stats)
-            for (auto idx = 0; idx < prev_size; idx++)
-            {
-                const auto prev_g = all_graphs[idx];
-                const auto start = ((i - 1) * (i - 2) / 2);
-
-                for (uint64_t row_perm = 1; row_perm < (1ULL << (i - 1)); row_perm++)
-                {
-                    auto instance = (row_perm << start) | prev_g;
-                    auto g = base_form(SpecificGraph(instance), i);
-                    handle_graph(g, stats, all_graphs, all_graphs_mutex, stats_mutex);
-                }
-            }
-            std::cout << all_graphs.size() << std::endl;
-        }
-        std::cout << std::endl;
-        print_stats(stats);
-    }
 
     private:
     void print_stats(const std::map<uint64_t, std::vector<std::unique_ptr<InstanceSolution>>>& stats) const
