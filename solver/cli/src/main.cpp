@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <np_solver/dataset_repository.hpp>
 #include <np_solver/graphs/di_graph.hpp>
 #include <np_solver/graphs/graph_iterator.hpp>
@@ -11,11 +11,15 @@ namespace npim
 {
 void run()
 {
-    constexpr int v = 5;
+    constexpr int v = 7;
+    // auto iso_filter = std::make_shared<filters::IsomorphFilter<graphs::UGraph<v>>>();
+    // auto connected_filter = std::make_shared<filters::ConnectedGraphFilter<graphs::UGraph<v>>>();
+    auto duplicate_filter = std::make_shared<filters::DuplicateFilter<graphs::UGraph<v>>>();
+
     auto max_ind_set_solver = std::make_shared<solvers::MaxIndependentSet<graphs::UGraph<v>>>();
-    auto iso_filter = std::make_shared<filters::IsomorphFilter<graphs::UGraph<v>>>();
-    auto perm_runner = PermutationRunner<graphs::UGraph<v>>({ iso_filter }, { max_ind_set_solver });
-    perm_runner.solve();
+    auto perm_runner =
+        IsomorphicGraphPermutationRunner<graphs::UGraph<v>>({ duplicate_filter }, { max_ind_set_solver });
+    perm_runner.solve_all();
 }
 } // namespace npim
 

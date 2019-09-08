@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <np_solver/graphs/graph_base.hpp>
 #include <np_solver/graphs/u_graph.hpp>
 #include <np_solver/math.hpp>
@@ -38,44 +38,53 @@ void swap(graphs::Graph<GT>& g, int v1, int v2)
     swap(from, g, v1, v2);
 }
 
-template<int V>
-constexpr std::vector<std::vector<std::tuple<int, int>>> all_swap_combinations()
+template <int V>
+constexpr int perm_matrix(const int col, int inst, const std::array<int, V - 1>& current_perm, std::vector<std::array<int, V - 1>>& perm_set, int active_vertices)
 {
-    auto swaps_set = std::vector<std::vector<std::tuple<int, int>>>();
-    swaps_set.reserve(factorial<V>());
-    swaps_set.push_back({});
-
-    for (auto i = 0; i < V; i++)
+    if (col < V)
     {
-        auto size = (int)swaps_set.size();
-        for (auto j = i + 1; j < V; j++)
+        inst = perm_matrix<V>(col + 1, inst, current_perm, perm_set, active_vertices); // zero recurse
+        auto copy = current_perm;
+        for (auto j = col; j < active_vertices; j++)
         {
-            for (auto k = 0; k < size; k++)
-            {
-                std::vector<std::tuple<int, int>> with = swaps_set[k];
-                with.push_back(std::make_tuple(i, j));
-                swaps_set.push_back(with);
-            }
+            copy[col] = j + 1;
+            inst = perm_matrix<V>(col + 1, inst, copy, perm_set, active_vertices); // recurse
         }
     }
-    return swaps_set;
+    else
+    {
+        perm_set.push_back(current_perm);
+        return ++inst;
+    }
+    return inst;
+}
+
+template <int V>
+constexpr std::vector<std::array<int, V - 1>> all_swap_combinations(int number_of_vertices)
+{
+    auto perm_set = std::vector<std::array<int, V - 1>>();
+    perm_set.reserve(factorial<V>());
+    perm_matrix<V>(0, 0, std::array<int, V - 1>(), perm_set, number_of_vertices-1);
+    // std::cout << "permsize: " << perm_set.size() << std::endl;
+
+    return perm_set;
 }
 
 template <typename GT>
-GT base_form(const graphs::Graph<GT>& base)
+GT base_form(const graphs::Graph<GT>& base, int active_vertices = GT::vertices())
 {
-    auto swaps_set = all_swap_combinations<base.vertices()>();
+    auto swaps_set = all_swap_combinations<GT::vertices()>(active_vertices);
     auto result = base.clone();
 
     for (const auto& swaps : swaps_set)
     {
         auto swapped = base.clone();
-        for (const auto& swap_pair : swaps)
+        for (auto i = 0; i < base.vertices() - 1; i++)
         {
-            const auto v1 = std::get<0>(swap_pair);
-            const auto v2 = std::get<1>(swap_pair);
-
-            swap(swapped, v1, v2);
+            if (swaps[i] != 0)
+            {
+                swap(swapped, i, swaps[i]);
+            }
         }
         if (swapped.edge_bits() < result.edge_bits())
         {
