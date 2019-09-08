@@ -11,7 +11,7 @@ namespace npim
 {
 void run()
 {
-    constexpr int v = 6;
+    constexpr int v = 7;
     // auto iso_filter = std::make_shared<filters::IsomorphFilter<graphs::UGraph<v>>>();
     // auto connected_filter = std::make_shared<filters::ConnectedGraphFilter<graphs::UGraph<v>>>();
     auto duplicate_filter = std::make_shared<filters::DuplicateFilter<graphs::UGraph<v>>>();

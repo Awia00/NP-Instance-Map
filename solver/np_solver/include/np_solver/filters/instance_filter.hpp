@@ -4,6 +4,7 @@
 #include <np_solver/isomorphism.hpp>
 #include <unordered_set>
 #include <vector>
+#include <mutex>
 
 namespace npim
 {
@@ -65,10 +66,13 @@ class DuplicateFilter : public InstanceFilter<SpecificGraph>
 {
     private:
     std::unordered_set<uint64_t> seen_graphs;
+    std::mutex seen_graph_mutex{};
 
     public:
     bool include_instance(const graphs::Graph<SpecificGraph>& g) override
     {
+        auto scoped_lock = std::scoped_lock(seen_graph_mutex);
+
         auto prev_size = this->seen_graphs.size();
         seen_graphs.insert(g.edge_bits());
         return prev_size != seen_graphs.size();
