@@ -52,6 +52,33 @@ class IsomorphicGraphPermutationRunner
     }
 
 	/**
+    * For a specific v < SpecificGraph::vertices(), find all fundemental graphs based on previously
+    * v-1 found graphs. It does so by running every permutation of adding a new node.
+    **/
+    void solve_specific_v(uint64_t specific_v,
+                          std::map<uint64_t, std::vector<std::unique_ptr<InstanceSolution>>>& stats,
+                          std::vector<uint64_t>& all_graphs,
+                          std::mutex& all_graphs_mutex,
+                          std::mutex& stats_mutex) const
+    {
+        const auto prev_size = all_graphs.size();
+        const auto start = ((specific_v - 1) * (specific_v - 2) / 2);
+        const auto number_of_perm = (1ULL << (specific_v - 1));
+
+#pragma omp parallel for shared(all_graphs_mutex, stats_mutex, all_graphs, stats)
+        for (auto idx = 0; idx < prev_size; idx++)
+        {
+            const auto prev_g = all_graphs[idx];
+            for (uint64_t row_perm = 1; row_perm < number_of_perm; row_perm++)
+            {
+                auto instance = (row_perm << start) | prev_g;
+                auto g = base_form(SpecificGraph(instance), specific_v);
+                filter_and_solve_graph(g, stats, all_graphs, all_graphs_mutex, stats_mutex);
+            }
+        }
+    }
+
+	/**
 	* Runs the filters on the graph, returns true if all the filters return true, false otherwise.
 	**/
     bool filter_check(const graphs::Graph<SpecificGraph>& g) const
@@ -85,33 +112,6 @@ class IsomorphicGraphPermutationRunner
             {
 				auto scoped_lock = std::scoped_lock(stats_mutex);
 				stats[g.edge_bits()].push_back(std::move(res));
-            }
-        }
-    }
-
-	/**
-	* For a specific v < SpecificGraph::vertices(), find all fundemental graphs based on previously v-1 found graphs.
-	* It does so by running every permutation of adding a new node.
-	**/
-	void solve_specific_v(uint64_t specific_v,
-                          std::map<uint64_t, std::vector<std::unique_ptr<InstanceSolution>>>& stats,
-                          std::vector<uint64_t>& all_graphs,
-                          std::mutex& all_graphs_mutex,
-                          std::mutex& stats_mutex) const
-    {
-        const auto prev_size = all_graphs.size();
-        const auto start = ((specific_v - 1) * (specific_v - 2) / 2);
-        const auto number_of_perm = (1ULL << (specific_v - 1));
-
-#pragma omp parallel for shared(all_graphs_mutex, stats_mutex, all_graphs, stats)
-        for (auto idx = 0; idx < prev_size; idx++)
-        {
-            const auto prev_g = all_graphs[idx];
-            for (uint64_t row_perm = 1; row_perm < number_of_perm; row_perm++)
-            {
-                auto instance = (row_perm << start) | prev_g;
-                auto g = base_form(SpecificGraph(instance), specific_v);
-                filter_and_solve_graph(g, stats, all_graphs, all_graphs_mutex, stats_mutex);
             }
         }
     }
