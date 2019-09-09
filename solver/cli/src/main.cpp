@@ -1,7 +1,7 @@
 ﻿#include <iostream>
 #include <np_solver/dataset_repository.hpp>
 #include <np_solver/graphs/di_graph.hpp>
-#include <np_solver/graphs/graph_iterator.hpp>
+#include <np_solver/graphs/graph_distance.hpp>
 #include <np_solver/graphs/u_graph.hpp>
 #include <np_solver/isomorphism.hpp>
 #include <np_solver/permutation_runner.hpp>

@@ -12,8 +12,8 @@ template <class SpecificGraph>
 class IsomorphicGraphPermutationRunner
 {
     protected:
-    std::vector<std::shared_ptr<filters::InstanceFilter<SpecificGraph>>> filters;
-    std::vector<std::shared_ptr<solvers::InstanceSolver<SpecificGraph>>> solvers;
+    const std::vector<std::shared_ptr<filters::InstanceFilter<SpecificGraph>>> filters;
+    const std::vector<std::shared_ptr<solvers::InstanceSolver<SpecificGraph>>> solvers;
 
     public:
     IsomorphicGraphPermutationRunner(
