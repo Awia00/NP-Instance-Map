@@ -39,10 +39,7 @@ class MaxIndependentSet : public InstanceSolver<SpecificGraph>
             }
         }
 
-        auto res = std::make_unique<MaxIndependentSetSolution<V>>();
-        res->best = best;
-        res->number_of_solutions = counter;
-        res->solution = best_solution;
+        auto res = std::make_unique<MaxCliqueSolution<V>>(best, counter, best_solution);
 		return res;
     }
 
