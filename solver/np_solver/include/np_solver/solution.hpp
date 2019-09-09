@@ -25,4 +25,15 @@ struct MaxIndependentSetSolution : public InstanceSolution
 	};
 };
 
+
+template <int V>
+struct MaxCliqueSolution : public InstanceSolution
+{
+    // best solution
+    std::bitset<V> solution{ 0 };
+
+    void serialize() const override{
+        // todo
+    };
+};
 }
