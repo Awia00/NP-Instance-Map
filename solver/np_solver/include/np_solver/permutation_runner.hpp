@@ -26,7 +26,7 @@ class IsomorphicGraphPermutationRunner
 	/**
 	* Runs the solvers on each fundemental graph up to size V determined by template SpecificGraph.
 	**/
-	void solve_all() const
+    std::map<uint64_t, std::vector<std::unique_ptr<InstanceSolution>>> solve_all() const
     {
         constexpr uint64_t V = SpecificGraph::vertices();
         constexpr uint64_t number_of_graphs = SpecificGraph::number_of_graphs();
@@ -48,6 +48,7 @@ class IsomorphicGraphPermutationRunner
         }
         std::cout << std::endl;
         print_stats(stats);
+        return stats;
     }
 
 	/**

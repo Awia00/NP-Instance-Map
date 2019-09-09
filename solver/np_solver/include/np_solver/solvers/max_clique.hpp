@@ -51,7 +51,7 @@ class MaxClique : public InstanceSolver<SpecificGraph>
         }
         else
         {
-            return validate_solution(solution.solution);
+            return validate_solution(g, solution.solution);
         }
     }
 

@@ -23,7 +23,13 @@ void run()
     auto perm_runner =
         IsomorphicGraphPermutationRunner<graphs::UGraph<v>>({ duplicate_filter },
                                                             { max_ind_set_solver, max_clique_solver });
-    perm_runner.solve_all();
+    auto result = perm_runner.solve_all();
+
+	// todo:
+	// Serialize data.
+	// csv format: graph id, problem_#1_best_solution, problem_#2_best_solution
+	// file name include V
+
 }
 } // namespace npim
 
