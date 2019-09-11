@@ -13,5 +13,6 @@
 **/*.ppm
 **/*.ipynb
 **/*Doxy*
+**/.ipynb_checkpoints
 solver/build
 solver/out
