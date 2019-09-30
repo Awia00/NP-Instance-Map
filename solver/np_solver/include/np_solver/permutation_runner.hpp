@@ -18,14 +18,14 @@ class IsomorphicGraphPermutationRunner
     public:
     IsomorphicGraphPermutationRunner(
         const std::vector<std::shared_ptr<filters::InstanceFilter<SpecificGraph>>>& filters,
-                      const std::vector<std::shared_ptr<solvers::InstanceSolver<SpecificGraph>>>& solvers)
+        const std::vector<std::shared_ptr<solvers::InstanceSolver<SpecificGraph>>>& solvers)
       : filters(filters), solvers(solvers)
     {
     }
 
-	/**
-	* Runs the solvers on each fundemental graph up to size V determined by template SpecificGraph.
-	**/
+    /**
+     * Runs the solvers on each fundemental graph up to size V determined by template SpecificGraph.
+     **/
     std::map<uint64_t, std::vector<std::unique_ptr<InstanceSolution>>> solve_all() const
     {
         constexpr uint64_t V = SpecificGraph::vertices();
@@ -51,10 +51,10 @@ class IsomorphicGraphPermutationRunner
         return stats;
     }
 
-	/**
-    * For a specific v < SpecificGraph::vertices(), find all fundemental graphs based on previously
-    * v-1 found graphs. It does so by running every permutation of adding a new node.
-    **/
+    /**
+     * For a specific v < SpecificGraph::vertices(), find all fundemental graphs based on previously
+     * v-1 found graphs. It does so by running every permutation of adding a new node.
+     **/
     void solve_specific_v(uint64_t specific_v,
                           std::map<uint64_t, std::vector<std::unique_ptr<InstanceSolution>>>& stats,
                           std::vector<uint64_t>& all_graphs,
@@ -78,9 +78,9 @@ class IsomorphicGraphPermutationRunner
         }
     }
 
-	/**
-	* Runs the filters on the graph, returns true if all the filters return true, false otherwise.
-	**/
+    /**
+     * Runs the filters on the graph, returns true if all the filters return true, false otherwise.
+     **/
     bool filter_check(const graphs::Graph<SpecificGraph>& g) const
     {
         auto should_solve = true;
@@ -91,9 +91,9 @@ class IsomorphicGraphPermutationRunner
         return should_solve;
     }
 
-	/**
-	* Runs the solvers on the specific graph, adds the results to stats.
-	**/
+    /**
+     * Runs the solvers on the specific graph, adds the results to stats.
+     **/
     void solve_graph(const graphs::Graph<SpecificGraph>& g,
                      std::map<uint64_t, std::vector<std::unique_ptr<InstanceSolution>>>& stats,
                      std::mutex& stats_mutex) const
@@ -110,22 +110,21 @@ class IsomorphicGraphPermutationRunner
                 res = solver->solve(g);
             }
             {
-				auto scoped_lock = std::scoped_lock(stats_mutex);
-				stats[g.edge_bits()].push_back(std::move(res));
+                auto scoped_lock = std::scoped_lock(stats_mutex);
+                stats[g.edge_bits()].push_back(std::move(res));
             }
         }
     }
 
-
-	private:
-	/**
-	* Checks if the graph should be solved, and solves it if it should.
-	**/
+    private:
+    /**
+     * Checks if the graph should be solved, and solves it if it should.
+     **/
     void filter_and_solve_graph(const graphs::Graph<SpecificGraph>& g,
-                      std::map<uint64_t, std::vector<std::unique_ptr<InstanceSolution>>>& stats,
-                      std::vector<uint64_t>& all_graphs,
-                      std::mutex& all_graphs_mutex,
-                      std::mutex& stats_mutex) const
+                                std::map<uint64_t, std::vector<std::unique_ptr<InstanceSolution>>>& stats,
+                                std::vector<uint64_t>& all_graphs,
+                                std::mutex& all_graphs_mutex,
+                                std::mutex& stats_mutex) const
     {
         if (filter_check(g))
         {
@@ -137,7 +136,6 @@ class IsomorphicGraphPermutationRunner
             solve_graph(g, stats, stats_mutex);
         }
     }
-
 
     private:
     void print_stats(const std::map<uint64_t, std::vector<std::unique_ptr<InstanceSolution>>>& stats) const

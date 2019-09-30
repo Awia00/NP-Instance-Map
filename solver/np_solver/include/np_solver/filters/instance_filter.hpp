@@ -1,21 +1,21 @@
 ﻿#pragma once
+#include <mutex>
 #include <np_solver/graphs/graph_base.hpp>
 #include <np_solver/graphs/u_graph.hpp>
 #include <np_solver/isomorphism.hpp>
 #include <unordered_set>
 #include <vector>
-#include <mutex>
 
 namespace npim
 {
 namespace filters
 {
-
 template <class SpecificGraph>
 class InstanceFilter
 {
     public:
     virtual bool include_instance(const graphs::Graph<SpecificGraph>& g) = 0;
+    virtual ~InstanceFilter() = default;
 };
 
 template <class SpecificGraph>
@@ -91,6 +91,5 @@ class ConnectedGraphFilter : public InstanceFilter<SpecificGraph>
         return g.is_connected();
     }
 };
-
 } // namespace filters
 } // namespace npim

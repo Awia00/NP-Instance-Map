@@ -10,10 +10,10 @@ namespace npim
 {
 class DatasetRepository
 {
-    const std::experimental::filesystem::path dataset_path;
+    const std::filesystem::path dataset_path;
 
     public:
-    DatasetRepository(const std::experimental::filesystem::path& path) : dataset_path(path)
+    DatasetRepository(const std::filesystem::path& path) : dataset_path(path)
     {
     }
 

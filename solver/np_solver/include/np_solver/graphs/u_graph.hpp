@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <np_solver/graphs/graph_base.hpp>
 
 namespace npim
@@ -71,6 +71,5 @@ struct UGraph : public Graph<UGraph<V>>
         return edges.to_ullong();
     }
 };
-
 } // namespace graphs
 } // namespace npim

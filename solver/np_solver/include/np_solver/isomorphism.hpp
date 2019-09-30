@@ -34,12 +34,29 @@ void swap(graphs::Graph<GT>& g, int v1, int v2)
         return;
     }
 
-    const GT from = g.clone();
-    swap(from, g, v1, v2);
+    auto between = g.has_edge(v1, v2);
+    for (auto i = 0; i < GT::vertices(); i++)
+    {
+        auto first = g.has_edge(i, v1);
+        auto second = g.has_edge(i, v2);
+        g.set_edge(i, v2, first);
+        g.set_edge(i, v1, second);
+    }
+    if constexpr (std::is_same<GT, graphs::UGraph<GT::vertices()>>())
+    {
+        g.set_edge(v1, v2, between); // case for UGraphs
+    }
+
+    // const GT from = g.clone();
+    // swap(from, g, v1, v2);
 }
 
 template <int V>
-constexpr int perm_matrix(const int col, int inst, const std::array<int, V - 1>& current_perm, std::vector<std::array<int, V - 1>>& perm_set, int active_vertices)
+constexpr int perm_matrix(const int col,
+                          int inst,
+                          const std::array<int, V - 1>& current_perm,
+                          std::vector<std::array<int, V - 1>>& perm_set,
+                          int active_vertices)
 {
     if (col < V)
     {
@@ -64,7 +81,7 @@ constexpr std::vector<std::array<int, V - 1>> all_swap_combinations(int number_o
 {
     auto perm_set = std::vector<std::array<int, V - 1>>();
     perm_set.reserve(factorial<V>());
-    perm_matrix<V>(0, 0, std::array<int, V - 1>(), perm_set, number_of_vertices-1);
+    perm_matrix<V>(0, 0, std::array<int, V - 1>(), perm_set, number_of_vertices - 1);
     // std::cout << "permsize: " << perm_set.size() << std::endl;
 
     return perm_set;
